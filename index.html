@@ -1,0 +1,2857 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LORE Resorts — ResortFlow CRM</title>
+    <style>
+        * {
+            box-sizing: border-box
+        }
+
+        body {
+            margin: 0;
+            font-family: Inter, Segoe UI, Arial, sans-serif;
+            background: #f4f0e7;
+            color: var(--ink)
+        }
+
+        :root {
+            --nav: #17352d;
+            --blue: #456b5d;
+            --green: #718b5a;
+            --amber: #b89558;
+            --red: #b45f54;
+            --muted: #6d756f;
+            --line: #e4dfd4;
+            --card: #fffdf8;
+            --cream: #f6f1e7;
+            --ink: #25332d;
+            --gold: #b89558
+        }
+
+        button,
+        input,
+        select,
+        textarea {
+            font: inherit
+        }
+
+        button {
+            cursor: pointer;
+            border: 0
+        }
+
+        .app {
+            display: flex;
+            min-height: 100vh
+        }
+
+        .sidebar {
+            width: 260px;
+            background: var(--nav);
+            color: #dbe7f5;
+            padding: 18px 12px;
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            overflow: auto
+        }
+
+        .brand {
+            font-family: Georgia, 'Times New Roman', serif;
+            font-weight: 500;
+            letter-spacing: 2px;
+            font-size: 23px;
+            padding: 8px 12px 20px;
+            color: #f8f2e7
+        }
+
+        .brand small {
+            display: block;
+            color: #b9c8bb;
+            font: 500 9px Inter, Arial, sans-serif;
+            letter-spacing: 1.4px;
+            text-transform: uppercase;
+            margin-top: 5px
+        }
+
+        .nav button {
+            width: 100%;
+            background: transparent;
+            color: #c9d7e7;
+            text-align: left;
+            padding: 10px 12px;
+            border-radius: 9px;
+            margin: 2px 0
+        }
+
+        .nav button:hover,
+        .nav button.active {
+            background: #315548;
+            color: white
+        }
+
+        .nav .group {
+            font-size: 10px;
+            color: #7890aa;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 16px 12px 6px
+        }
+
+        .main {
+            margin-left: 260px;
+            flex: 1
+        }
+
+        .top {
+            height: 68px;
+            background: white;
+            border-bottom: 1px solid var(--line);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 25px;
+            position: sticky;
+            top: 0;
+            z-index: 10
+        }
+
+        .search {
+            background: #f3f6fa;
+            border: 1px solid var(--line);
+            padding: 9px 13px;
+            border-radius: 9px;
+            width: 340px
+        }
+
+        .top-right {
+            display: flex;
+            gap: 10px;
+            align-items: center
+        }
+
+        .avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: #dbeafe;
+            color: #1d4ed8;
+            display: grid;
+            place-items: center;
+            font-weight: 700
+        }
+
+        .content {
+            padding: 25px
+        }
+
+        .page-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px
+        }
+
+        .page-head h1 {
+            margin: 0;
+            font-family: Georgia, 'Times New Roman', serif;
+            font-weight: 500;
+            font-size: 27px;
+            letter-spacing: .2px
+        }
+
+        .muted {
+            color: var(--muted);
+            font-size: 13px
+        }
+
+        .btn {
+            padding: 9px 14px;
+            border-radius: 8px;
+            background: #eef2f7;
+            color: #243247;
+            font-weight: 600
+        }
+
+        .btn.primary {
+            background: var(--nav);
+            color: #fff
+        }
+
+        .btn.success {
+            background: var(--green);
+            color: white
+        }
+
+        .btn.danger {
+            background: #f3dfdb;
+            color: #8d3e35
+        }
+
+        .btn.sm {
+            padding: 6px 9px;
+            font-size: 12px
+        }
+
+        .grid {
+            display: grid;
+            gap: 16px
+        }
+
+        .g4 {
+            grid-template-columns: repeat(4, 1fr)
+        }
+
+        .g3 {
+            grid-template-columns: repeat(3, 1fr)
+        }
+
+        .g2 {
+            grid-template-columns: repeat(2, 1fr)
+        }
+
+        .card {
+            background: var(--card);
+            border: 1px solid var(--line);
+            border-radius: 10px;
+            padding: 17px;
+            box-shadow: 0 3px 12px #3a463c0b
+        }
+
+        .stat {
+            font-size: 28px;
+            font-weight: 800;
+            margin-top: 6px
+        }
+
+        .stat.green {
+            color: #5e7b4c
+        }
+
+        .stat.blue {
+            color: #456b5d
+        }
+
+        .stat.amber {
+            color: #a27d3d
+        }
+
+        .stat.red {
+            color: #a95249
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse
+        }
+
+        .table th,
+        .table td {
+            padding: 11px;
+            border-bottom: 1px solid var(--line);
+            text-align: left;
+            font-size: 13px
+        }
+
+        .table th {
+            color: #64748b;
+            font-size: 11px;
+            text-transform: uppercase
+        }
+
+        .badge {
+            padding: 4px 8px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 700;
+            display: inline-block
+        }
+
+        .bgreen {
+            background: #dcfce7;
+            color: #166534
+        }
+
+        .bblue {
+            background: #dbeafe;
+            color: #1d4ed8
+        }
+
+        .bamber {
+            background: #fef3c7;
+            color: #92400e
+        }
+
+        .bred {
+            background: #fee2e2;
+            color: #b91c1c
+        }
+
+        .tabs {
+            display: flex;
+            gap: 4px;
+            border-bottom: 1px solid var(--line);
+            margin-bottom: 16px
+        }
+
+        .tab {
+            padding: 10px 13px;
+            background: transparent;
+            color: #64748b
+        }
+
+        .tab.active {
+            color: #456b5d;
+            border-bottom: 2px solid #b89558;
+            font-weight: 700
+        }
+
+        .kanban {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 12px
+        }
+
+        .lane {
+            background: #eef2f7;
+            border-radius: 10px;
+            padding: 10px;
+            min-height: 440px
+        }
+
+        .lane h3 {
+            font-size: 13px;
+            margin: 3px 3px 10px
+        }
+
+        .leadcard {
+            background: white;
+            border: 1px solid var(--line);
+            border-radius: 9px;
+            padding: 11px;
+            margin: 8px 0;
+            box-shadow: 0 2px 4px #00000008
+        }
+
+        .leadcard b {
+            font-size: 13px
+        }
+
+        .leadcard small {
+            display: block;
+            color: #64748b;
+            margin-top: 4px
+        }
+
+        .field {
+            margin-bottom: 12px
+        }
+
+        .field label {
+            font-size: 12px;
+            color: #64748b;
+            font-weight: 700;
+            display: block;
+            margin-bottom: 5px
+        }
+
+        .field input,
+        .field select,
+        .field textarea {
+            width: 100%;
+            border: 1px solid #d9e0ea;
+            border-radius: 8px;
+            padding: 9px;
+            background: white
+        }
+
+        .field textarea {
+            min-height: 80px;
+            resize: vertical
+        }
+
+        .formgrid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px
+        }
+
+        .full {
+            grid-column: 1/-1
+        }
+
+        .modal {
+            position: fixed;
+            inset: 0;
+            background: #07142599;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 50;
+            padding: 20px
+        }
+
+        .modal.show {
+            display: flex
+        }
+
+        .modalbox {
+            background: #fff;
+            width: min(900px, 96vw);
+            max-height: 90vh;
+            overflow: auto;
+            border-radius: 14px;
+            padding: 22px
+        }
+
+        .modalhead {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px
+        }
+
+        .close {
+            background: #f1f5f9;
+            border-radius: 50%;
+            width: 32px;
+            height: 32px
+        }
+
+        .timeline {
+            border-left: 2px solid #dbe4ef;
+            padding-left: 18px
+        }
+
+        .event {
+            margin: 0 0 17px;
+            position: relative
+        }
+
+        .event:before {
+            content: "";
+            position: absolute;
+            left: -25px;
+            top: 3px;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #b89558
+        }
+
+        .timeline b {
+            font-size: 13px
+        }
+
+        .timeline small {
+            display: block;
+            color: #64748b;
+            margin-top: 3px
+        }
+
+        .progress {
+            height: 8px;
+            background: #e9eef5;
+            border-radius: 20px;
+            overflow: hidden
+        }
+
+        .progress span {
+            display: block;
+            height: 100%;
+            background: #718b5a
+        }
+
+        .flow {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap
+        }
+
+        .node {
+            padding: 9px 11px;
+            border: 1px solid #d8e0eb;
+            border-radius: 8px;
+            background: #fff;
+            font-size: 12px
+        }
+
+        .arrow {
+            color: #b89558
+        }
+
+        .checklist label {
+            display: block;
+            padding: 7px 0
+        }
+
+        .checklist input {
+            margin-right: 8px
+        }
+
+        .empty {
+            padding: 35px;
+            text-align: center;
+            color: #64748b
+        }
+
+        .toast {
+            position: fixed;
+            right: 25px;
+            bottom: 25px;
+            background: #172033;
+            color: white;
+            padding: 12px 16px;
+            border-radius: 9px;
+            display: none;
+            z-index: 100
+        }
+
+        .toast.show {
+            display: block
+        }
+
+        .mini {
+            font-size: 11px
+        }
+
+        .right {
+            text-align: right
+        }
+
+        .section-title {
+            font-size: 15px;
+            font-weight: 800;
+            margin: 20px 0 10px
+        }
+
+        .permission {
+            display: grid;
+            grid-template-columns: 1.3fr repeat(4, 1fr);
+            border: 1px solid var(--line);
+            border-bottom: 0
+        }
+
+        .permission>div {
+            padding: 9px;
+            border-bottom: 1px solid var(--line);
+            font-size: 12px
+        }
+
+        .permission>div:nth-child(n+2) {
+            text-align: center
+        }
+
+        .switch {
+            width: 38px;
+            height: 20px;
+            border-radius: 20px;
+            background: #cbd5e1;
+            display: inline-block;
+            vertical-align: middle;
+            position: relative
+        }
+
+        .switch.on {
+            background: #2563eb
+        }
+
+        .switch:after {
+            content: "";
+            width: 16px;
+            height: 16px;
+            background: #fff;
+            border-radius: 50%;
+            position: absolute;
+            top: 2px;
+            left: 2px
+        }
+
+        .switch.on:after {
+            left: 20px
+        }
+
+        .chart {
+            height: 180px;
+            display: flex;
+            align-items: end;
+            gap: 12px;
+            padding: 10px
+        }
+
+        .bar {
+            flex: 1;
+            background: #718b5a;
+            border-radius: 5px 5px 0 0;
+            position: relative
+        }
+
+        .bar span {
+            position: absolute;
+            bottom: -20px;
+            width: 100%;
+            text-align: center;
+            font-size: 10px;
+            color: #64748b
+        }
+
+        .notice {
+            padding: 10px 12px;
+            background: #eff6ff;
+            border-left: 4px solid #2563eb;
+            border-radius: 6px;
+            font-size: 12px
+        }
+
+        .danger-note {
+            background: #fff7ed;
+            border-left-color: #f59e0b
+        }
+
+        .responsive-note {
+            display: none
+        }
+
+        @media(max-width:900px) {
+            .sidebar {
+                width: 72px
+            }
+
+            .brand {
+                font-size: 0
+            }
+
+            .brand:before {
+                content: "RF";
+                font-size: 20px
+            }
+
+            .nav button span {
+                display: none
+            }
+
+            .main {
+                margin-left: 72px
+            }
+
+            .g4,
+            .g3 {
+                grid-template-columns: repeat(2, 1fr)
+            }
+
+            .kanban {
+                grid-template-columns: 1fr 1fr
+            }
+
+            .search {
+                width: 180px
+            }
+        }
+
+        .logo-wrap {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 2px 8px 18px;
+            padding-bottom: 14px;
+            border-bottom: 1px solid #496458
+        }
+
+        .logo-wrap img {
+            width: 43px;
+            height: 43px;
+            object-fit: contain;
+            border-radius: 6px;
+            background: #f7f2e8;
+            padding: 4px
+        }
+
+        .logo-word {
+            font-family: Georgia, 'Times New Roman', serif;
+            letter-spacing: 3px;
+            font-size: 20px;
+            color: #f8f2e7
+        }
+
+        .logo-word small {
+            display: block;
+            font: 500 8px Inter, Arial, sans-serif;
+            letter-spacing: 1.4px;
+            color: #b9c8bb;
+            margin-top: 3px
+        }
+
+        .top {
+            background: #fffdf8;
+            border-bottom-color: #ded8cc
+        }
+
+        .search {
+            background: #f7f3eb;
+            border-color: #ded8cc
+        }
+
+        h2,
+        h3 {
+            font-family: Georgia, 'Times New Roman', serif;
+            font-weight: 500
+        }
+
+        /* Enhanced interactive module styling */
+        .backbtn {
+            width: 34px;
+            height: 34px;
+            border-radius: 8px;
+            background: #eee8db;
+            color: #315548;
+            font-size: 18px;
+            margin-right: 10px
+        }
+
+        .subhead {
+            display: flex;
+            align-items: center
+        }
+
+        .report-card {
+            cursor: pointer;
+            transition: .15s;
+            border: 1px solid var(--line)
+        }
+
+        .report-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 7px 20px #3a463c14
+        }
+
+        .filterbar {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-bottom: 14px
+        }
+
+        .filterbar input,
+        .filterbar select {
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            padding: 8px;
+            background: #fffdf8
+        }
+
+        .doc {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--line)
+        }
+
+        .doc:last-child {
+            border-bottom: 0
+        }
+
+        .doc-icon {
+            font-size: 22px;
+            margin-right: 9px
+        }
+
+        .pillnav {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+            margin-bottom: 15px
+        }
+
+        .pillnav button {
+            padding: 8px 11px;
+            border: 1px solid var(--line);
+            border-radius: 20px;
+            background: #fffdf8
+        }
+
+        .pillnav button.active {
+            background: #315548;
+            color: #fff;
+            border-color: #315548
+        }
+
+
+        /* --- Polished CRM UI --- */
+        :root {
+            --shadow-soft: 0 4px 18px rgba(39, 51, 45, .07);
+            --shadow-modal: 0 24px 70px rgba(22, 38, 31, .20);
+        }
+
+        h1,
+        h2,
+        h3 {
+            margin-top: 0
+        }
+
+        .page-head {
+            min-height: 48px
+        }
+
+        .page-title-row {
+            display: flex;
+            align-items: center;
+            gap: 10px
+        }
+
+        .back-btn {
+            flex: 0 0 34px;
+            width: 34px;
+            height: 34px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid var(--line);
+            background: #fffdf8;
+            border-radius: 9px;
+            color: var(--nav);
+            font-size: 18px;
+            box-shadow: none;
+        }
+
+        .back-btn:hover {
+            background: #f0eadf;
+            border-color: #cfc6b6
+        }
+
+        .card {
+            box-shadow: var(--shadow-soft)
+        }
+
+        .card-head {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 14px
+        }
+
+        .card-head h3 {
+            margin-bottom: 3px
+        }
+
+        .dashboard-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            margin-bottom: 16px;
+        }
+
+        .dashboard-title h1 {
+            font-family: Georgia, 'Times New Roman', serif;
+            font-size: 30px;
+            font-weight: 500;
+            margin: 2px 0 3px
+        }
+
+        .eyebrow {
+            font-size: 10px;
+            font-weight: 800;
+            letter-spacing: 1.6px;
+            color: #8a7041;
+            text-transform: uppercase
+        }
+
+        .dashboard-actions {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 7px;
+            flex-wrap: wrap
+        }
+
+        .dashboard-actions .btn {
+            white-space: nowrap
+        }
+
+        .dashboard-datebar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 13px;
+            margin-bottom: 16px;
+            background: #eee8db;
+            border: 1px solid #e2d9c8;
+            border-radius: 9px;
+            color: #425047;
+            font-size: 12px;
+        }
+
+        .green-dot {
+            background: #718b5a
+        }
+
+        .status-dot {
+            display: inline-block;
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            margin-right: 4px
+        }
+
+        .dashboard-kpis {
+            margin-bottom: 16px
+        }
+
+        .dashboard-main-grid {
+            margin-top: 16px
+        }
+
+        .dashboard-chart {
+            height: 205px
+        }
+
+        .chart-legend {
+            display: flex;
+            gap: 18px;
+            color: var(--muted);
+            font-size: 11px
+        }
+
+        .legend-box {
+            display: inline-block;
+            width: 9px;
+            height: 9px;
+            border-radius: 2px;
+            margin-right: 5px
+        }
+
+        .revenue-box {
+            background: #718b5a
+        }
+
+        .occupancy-box {
+            background: #b89558
+        }
+
+        .ops-list {
+            display: flex;
+            flex-direction: column
+        }
+
+        .ops-row {
+            display: grid;
+            grid-template-columns: 34px 1fr auto;
+            align-items: center;
+            gap: 9px;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--line)
+        }
+
+        .ops-row:last-child {
+            border-bottom: 0
+        }
+
+        .ops-row small {
+            display: block;
+            color: var(--muted);
+            margin-top: 2px;
+            font-size: 11px
+        }
+
+        .ops-icon {
+            width: 30px;
+            height: 30px;
+            border-radius: 8px;
+            background: #f0eadf;
+            display: grid;
+            place-items: center;
+            color: #456b5d;
+            font-weight: 800
+        }
+
+        .funnel-row,
+        .channel-row,
+        .split-label {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 12px;
+            margin: 9px 0 5px
+        }
+
+        .funnel-track,
+        .mini-progress {
+            height: 7px;
+            background: #ebe8df;
+            border-radius: 10px;
+            overflow: hidden
+        }
+
+        .funnel-track span,
+        .mini-progress span {
+            display: block;
+            height: 100%;
+            background: #718b5a;
+            border-radius: 10px
+        }
+
+        .room-summary {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 7px
+        }
+
+        .room-stat {
+            background: #f6f1e7;
+            border-radius: 8px;
+            padding: 11px 5px;
+            text-align: center
+        }
+
+        .room-stat b {
+            display: block;
+            font-size: 19px;
+            color: #456b5d
+        }
+
+        .room-stat small {
+            font-size: 10px;
+            color: var(--muted)
+        }
+
+        .event-mini {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--line)
+        }
+
+        .event-mini:last-of-type {
+            border-bottom: 0
+        }
+
+        .event-mini small {
+            display: block;
+            color: var(--muted);
+            margin-top: 3px;
+            font-size: 11px
+        }
+
+        .date-chip {
+            flex: 0 0 50px;
+            height: 50px;
+            border-radius: 12px;
+            background: #e6eef8;
+            color: #315e9b;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            line-height: 1
+        }
+
+        .date-chip b {
+            font-size: 16px
+        }
+
+        .date-chip small {
+            font-size: 9px;
+            font-weight: 800;
+            letter-spacing: .8px;
+            margin-top: 4px;
+            color: #315e9b
+        }
+
+        .compact-table th,
+        .compact-table td {
+            padding: 9px 7px
+        }
+
+        .alert-card {
+            background: #fffdf8
+        }
+
+        .guest-score {
+            font-size: 38px;
+            font-weight: 800;
+            color: #5e7b4c;
+            line-height: 1;
+            margin: 15px 0 5px
+        }
+
+        .guest-score small {
+            font-size: 14px;
+            color: var(--muted);
+            font-weight: 600
+        }
+
+        .quick-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 14px
+        }
+
+        .quick-card {
+            min-height: 92px;
+            padding: 15px 16px;
+            border: 1px solid #ded8cc;
+            border-radius: 12px;
+            background: #fffdf8;
+            display: flex;
+            align-items: center;
+            gap: 13px;
+            text-align: left;
+            transition: transform .15s, box-shadow .15s, border-color .15s;
+        }
+
+        .quick-card:hover {
+            transform: translateY(-2px);
+            border-color: #c7b89b;
+            box-shadow: 0 8px 22px rgba(45, 55, 47, .08)
+        }
+
+        .quick-card span:last-child {
+            display: flex;
+            flex-direction: column;
+            gap: 4px
+        }
+
+        .quick-card b {
+            font-size: 14px;
+            color: #17241e
+        }
+
+        .quick-card small {
+            font-size: 11px;
+            color: var(--muted)
+        }
+
+        .quick-icon {
+            width: 42px;
+            height: 42px;
+            flex: 0 0 42px;
+            border-radius: 11px;
+            background: #f1eadf;
+            display: grid;
+            place-items: center;
+            font-size: 20px;
+        }
+
+        .modalbox {
+            width: min(980px, 96vw);
+            max-height: 90vh;
+            overflow: auto;
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: var(--shadow-modal);
+            background: #fffdf8;
+        }
+
+        .modalhead {
+            align-items: flex-start
+        }
+
+        .modalhead h2 {
+            font-size: 25px;
+            margin: 2px 0 4px
+        }
+
+        .close {
+            width: 36px;
+            height: 36px;
+            display: grid;
+            place-items: center;
+            background: #f1eee7;
+            color: #25332d;
+            font-size: 18px
+        }
+
+        .badge {
+            min-height: 22px;
+            height: auto;
+            line-height: 14px;
+            padding: 4px 9px;
+            border-radius: 999px;
+            font-size: 10px;
+            font-weight: 800;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            white-space: nowrap;
+            vertical-align: middle;
+        }
+
+        .status-step {
+            min-height: 30px;
+            padding: 7px 11px;
+            border-radius: 999px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            white-space: nowrap;
+            font-size: 11px;
+        }
+
+        .doc {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--line)
+        }
+
+        .check-row {
+            display: block;
+            padding: 9px 10px;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            margin: 7px 0;
+            background: #fff
+        }
+
+        .report-hero {
+            display: flex;
+            align-items: center;
+            justify-content: space-between
+        }
+
+        .report-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            background: #e4eee1;
+            color: #456b5d;
+            display: grid;
+            place-items: center;
+            font-size: 22px
+        }
+
+        .document-preview {
+            min-height: 310px;
+            border: 1px solid var(--line);
+            border-radius: 10px;
+            background: #f4f0e7;
+            padding: 28px;
+            text-align: center
+        }
+
+        .document-preview-icon {
+            font-size: 50px
+        }
+
+        .document-lines {
+            max-width: 420px;
+            margin: 20px auto
+        }
+
+        .document-lines span {
+            display: block;
+            height: 9px;
+            background: #e1dbcf;
+            border-radius: 4px;
+            margin: 9px 0
+        }
+
+        @media(max-width:1050px) {
+            .dashboard-head {
+                align-items: flex-start;
+                flex-direction: column
+            }
+
+            .dashboard-actions {
+                justify-content: flex-start
+            }
+
+            .quick-grid {
+                grid-template-columns: repeat(2, 1fr)
+            }
+        }
+
+        @media(max-width:700px) {
+            .dashboard-actions {
+                width: 100%
+            }
+
+            .dashboard-actions .btn {
+                flex: 1
+            }
+
+            .dashboard-datebar {
+                align-items: flex-start;
+                gap: 10px;
+                flex-direction: column
+            }
+
+            .quick-grid {
+                grid-template-columns: 1fr
+            }
+
+            .room-summary {
+                grid-template-columns: repeat(2, 1fr)
+            }
+        }
+
+        /* Luxury interaction layer */
+        @keyframes pageEnter {
+            from {
+                opacity: 0;
+                transform: translateY(7px)
+            }
+
+            to {
+                opacity: 1;
+                transform: none
+            }
+        }
+
+        @keyframes cardEnter {
+            from {
+                opacity: 0;
+                transform: translateY(10px)
+            }
+
+            to {
+                opacity: 1;
+                transform: none
+            }
+        }
+
+        @keyframes softPulse {
+
+            0%,
+            100% {
+                box-shadow: 0 0 0 0 rgba(184, 149, 88, .0)
+            }
+
+            50% {
+                box-shadow: 0 0 0 5px rgba(184, 149, 88, .10)
+            }
+        }
+
+        @keyframes drawerIn {
+            from {
+                opacity: 0;
+                transform: translateX(18px)
+            }
+
+            to {
+                opacity: 1;
+                transform: none
+            }
+        }
+
+        @keyframes modalIn {
+            from {
+                opacity: 0;
+                transform: translateY(15px) scale(.985)
+            }
+
+            to {
+                opacity: 1;
+                transform: none
+            }
+        }
+
+        @keyframes barGrow {
+            from {
+                height: 0 !important
+            }
+
+            to {
+                height: var(--bar-h)
+            }
+        }
+
+        .content {
+            animation: pageEnter .28s ease both
+        }
+
+        .content .card {
+            animation: cardEnter .35s ease both
+        }
+
+        .content .card:nth-child(2) {
+            animation-delay: .035s
+        }
+
+        .content .card:nth-child(3) {
+            animation-delay: .07s
+        }
+
+        .content .card:nth-child(4) {
+            animation-delay: .105s
+        }
+
+        .modal.show .modalbox {
+            animation: modalIn .24s ease both
+        }
+
+        .drawer.show {
+            animation: drawerIn .24s ease both
+        }
+
+        .quick-card,
+        .btn,
+        .nav button,
+        .tab,
+        .room-card,
+        .kpi-card {
+            transition: transform .18s ease, box-shadow .18s ease, background .18s ease, border-color .18s ease
+        }
+
+        .quick-card:hover,
+        .room-card:hover,
+        .kpi-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 24px rgba(37, 50, 43, .09)
+        }
+
+        .btn:hover {
+            transform: translateY(-1px)
+        }
+
+        .nav button:hover {
+            transform: translateX(2px)
+        }
+
+        .kpi-card {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(145deg, #fffdf8, #faf7ef)
+        }
+
+        .kpi-card:after {
+            content: "";
+            position: absolute;
+            width: 75px;
+            height: 75px;
+            border-radius: 50%;
+            right: -25px;
+            top: -28px;
+            background: rgba(184, 149, 88, .08)
+        }
+
+        .kpi-icon {
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+            display: grid;
+            place-items: center;
+            background: #eee8db;
+            color: #456b5d
+        }
+
+        .kpi-label {
+            font-size: 12px;
+            color: var(--muted);
+            font-weight: 700
+        }
+
+        .kpi-value {
+            font-size: 25px;
+            font-weight: 800;
+            margin-top: 5px;
+            color: var(--ink)
+        }
+
+        .kpi-meta {
+            font-size: 11px;
+            color: #71806f;
+            margin-top: 7px
+        }
+
+        .kpi-trend {
+            color: #5f7d4e;
+            font-weight: 700
+        }
+
+        .dashboard-kpi-grid {
+            grid-template-columns: repeat(4, 1fr)
+        }
+
+        .dashboard-head {
+            align-items: center
+        }
+
+        .dashboard-actions {
+            display: flex;
+            gap: 7px;
+            flex-wrap: wrap;
+            justify-content: flex-end
+        }
+
+        .dashboard-actions .btn {
+            white-space: nowrap
+        }
+
+        .report-modal {
+            width: min(900px, 94vw) !important;
+            max-height: 86vh !important
+        }
+
+        .report-body {
+            max-height: 68vh;
+            overflow: auto;
+            padding-right: 4px
+        }
+
+        .report-summary {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-bottom: 16px
+        }
+
+        .report-metric {
+            padding: 14px;
+            border: 1px solid var(--line);
+            border-radius: 10px;
+            background: #faf7ef
+        }
+
+        .report-metric b {
+            font-size: 22px;
+            display: block;
+            margin-top: 4px
+        }
+
+        .report-table {
+            width: 100%;
+            border-collapse: collapse
+        }
+
+        .report-table th,
+        .report-table td {
+            padding: 10px;
+            border-bottom: 1px solid var(--line);
+            font-size: 12px;
+            text-align: left
+        }
+
+        .room-form-preview {
+            border: 1px dashed #cfc7b7;
+            border-radius: 10px;
+            padding: 12px;
+            background: #faf7ef
+        }
+
+        .quick-icon {
+            display: grid !important;
+            place-items: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background: #eee8db;
+            color: #456b5d !important
+        }
+
+        .quick-icon svg {
+            width: 21px;
+            height: 21px
+        }
+
+        .icon {
+            display: inline-flex;
+            vertical-align: middle;
+            flex: none
+        }
+
+        .icon svg {
+            display: block
+        }
+
+        .btn .icon {
+            margin-right: 6px
+        }
+
+        .nav .icon {
+            margin-right: 9px;
+            color: #aebfb2
+        }
+
+        .ops-icon {
+            width: 34px;
+            height: 34px;
+            border-radius: 9px;
+            background: #eee8db !important;
+            color: #456b5d !important;
+            display: grid !important;
+            place-items: center
+        }
+
+        .alert-icon {
+            display: inline-flex;
+            width: 28px;
+            height: 28px;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            background: #f2eee5;
+            color: #8c6d35;
+            margin-right: 7px
+        }
+
+        @media(max-width:1050px) {
+            .dashboard-kpi-grid {
+                grid-template-columns: repeat(2, 1fr)
+            }
+
+            .report-summary {
+                grid-template-columns: 1fr 1fr
+            }
+        }
+
+        @media(max-width:650px) {
+            .dashboard-kpi-grid {
+                grid-template-columns: 1fr
+            }
+
+            .dashboard-head {
+                align-items: flex-start;
+                flex-direction: column
+            }
+
+            .dashboard-actions {
+                justify-content: flex-start
+            }
+
+            .report-summary {
+                grid-template-columns: 1fr
+            }
+        }
+
+        @media(max-width:520px) {
+            .quick-grid {
+                grid-template-columns: 1fr
+            }
+
+            .quick-card {
+                min-height: 76px
+            }
+        }
+
+        .quick-secondary {
+            display: flex;
+            justify-content: flex-end;
+            gap: 8px;
+            margin-top: 14px;
+            padding-top: 14px;
+            border-top: 1px solid var(--line)
+        }
+
+        @media(max-width:520px) {
+            .quick-secondary {
+                flex-direction: column
+            }
+
+            .quick-secondary .btn {
+                width: 100%
+            }
+        }
+    </style>
+    <style>
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 34px;
+            height: 34px;
+            border: 1px solid var(--line);
+            background: #fffdf8;
+            border-radius: 8px;
+            color: var(--nav);
+            font-size: 18px;
+            margin-right: 10px
+        }
+
+        .page-title-row {
+            display: flex;
+            align-items: center
+        }
+
+        .drawer {
+            position: fixed;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            width: min(430px, 94vw);
+            background: #fffdf8;
+            box-shadow: -8px 0 30px #17203325;
+            z-index: 80;
+            padding: 22px;
+            overflow: auto;
+            transform: translateX(100%);
+            transition: .25s
+        }
+
+        .drawer.show {
+            transform: translateX(0)
+        }
+
+        .overlay {
+            position: fixed;
+            inset: 0;
+            background: #07142555;
+            z-index: 70;
+            display: none
+        }
+
+        .overlay.show {
+            display: block
+        }
+
+        .doc {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 11px;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            margin: 8px 0;
+            background: #fff
+        }
+
+        .filterbar {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-bottom: 14px
+        }
+
+        .filterbar select,
+        .filterbar input {
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            padding: 8px;
+            background: #fffdf8
+        }
+
+        .status-flow {
+            display: flex;
+            gap: 7px;
+            align-items: center;
+            flex-wrap: wrap;
+            margin: 12px 0
+        }
+
+        .status-step {
+            padding: 7px 10px;
+            border-radius: 20px;
+            background: #eef0eb;
+            font-size: 11px
+        }
+
+        .status-step.done {
+            background: #dce8d5;
+            color: #456b5d;
+            font-weight: 700
+        }
+
+        .status-step.current {
+            background: #e9dfca;
+            color: #7b5b28;
+            font-weight: 700
+        }
+    </style>
+</head>
+
+<body>
+    <div class="app">
+        <aside class="sidebar">
+            <div class="logo-wrap">
+                <img src="https://loreresorts.com/favicon.ico" alt="Lore Resorts logo"
+                    onerror="this.style.display='none'">
+                <div class="logo-word">LORE<small>RESORTS & CONVENTIONS</small></div>
+            </div>
+            <div class="nav">
+                <div class="group">Core</div>
+                <button onclick="go('dashboard')" id="nav-dashboard"><i
+                        data-icon='dashboard'></i><span>Dashboard</span></button>
+                <button onclick="go('leads')" id="nav-leads"><i data-icon='leads'></i><span>Leads /
+                        Enquiries</span></button>
+                <button onclick="go('pipeline')" id="nav-pipeline"><i data-icon='pipeline'></i><span>Lead
+                        Pipeline</span></button>
+                <button onclick="go('quotations')" id="nav-quotations"><i
+                        data-icon='quote'></i><span>Quotations</span></button>
+                <button onclick="go('bookings')" id="nav-bookings"><i
+                        data-icon='booking'></i><span>Bookings</span></button>
+                <button onclick="go('rooms')" id="nav-rooms"><i data-icon='room'></i><span>Rooms</span></button>
+                <button onclick="go('guests')" id="nav-guests"><i data-icon='guest'></i><span>Guests /
+                        Customers</span></button>
+                <button onclick="go('payments')" id="nav-payments"><i
+                        data-icon='payment'></i><span>Payments</span></button>
+                <button onclick="go('stay')" id="nav-stay"><i data-icon='stay'></i><span>Check-in /
+                        Check-out</span></button>
+                <div class="group">Operations</div>
+                <button onclick="go('housekeeping')" id="nav-housekeeping"><i
+                        data-icon='housekeeping'></i><span>Housekeeping</span></button>
+                <button onclick="go('inventory')" id="nav-inventory"><i data-icon='inventory'></i><span>Inventory &
+                        Requests</span></button>
+                <button onclick="go('packages')" id="nav-packages"><i data-icon='package'></i><span>Packages &
+                        Activities</span></button>
+                <button onclick="go('events')" id="nav-events"><i data-icon='event'></i><span>Events</span></button>
+                <button onclick="go('support')" id="nav-support"><i data-icon='support'></i><span>Support &
+                        Feedback</span></button>
+                <div class="group">Growth & Control</div>
+                <button onclick="go('marketing')" id="nav-marketing"><i data-icon='marketing'></i><span>Ads &
+                        Integrations</span></button>
+                <button onclick="go('reports')" id="nav-reports"><i data-icon='reports'></i><span>Reports &
+                        Analytics</span></button>
+                <button onclick="go('users')" id="nav-users"><i data-icon='users'></i><span>Users &
+                        Permissions</span></button>
+                <button onclick="go('settings')" id="nav-settings"><i data-icon='settings'></i><span>Settings &
+                        Audit</span></button>
+            </div>
+        </aside>
+        <main class="main">
+            <header class="top"><input class="search" placeholder="Search leads, guests, bookings..."
+                    onkeydown="if(event.key==='Enter') toast('Global search opened for: '+this.value)">
+                <div class="top-right"><button class="btn sm" onclick="notifications()"><span class="icon"><svg
+                                width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="1.8">
+                                <path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9" />
+                                <path d="M10 21h4" />
+                            </svg></span> 3</button><button class="btn sm" onclick="openModal('quick')">＋ Quick
+                        Add</button>
+                    <div class="avatar" onclick="userProfile()" style="cursor:pointer">BJ</div>
+                </div>
+            </header>
+            <section class="content" id="content"></section>
+        </main>
+    </div>
+    <div class="modal" id="modal">
+        <div class="modalbox" id="modalbox"></div>
+    </div>
+    <div class="toast" id="toast"></div>
+    <div class="overlay" id="overlay" onclick="closeDrawer()"></div>
+    <div class="drawer" id="drawer"></div>
+
+    <script>
+        const state = {
+            leads: [
+                { id: 1, name: 'Rahul Sharma', phone: '+91 98765 43210', source: 'Instagram', stage: 'New', owner: 'Amit', score: 82, last: '18 Sep', touches: 3 },
+                { id: 2, name: 'Neha Kapoor', phone: '+91 99887 22110', source: 'Google Ads', stage: 'Qualified', owner: 'Priya', score: 91, last: '19 Sep', touches: 6 },
+                { id: 3, name: 'Arjun Mehta', phone: '+91 99111 22334', source: 'WhatsApp', stage: 'Proposal', owner: 'Amit', score: 76, last: '17 Sep', touches: 4 },
+                { id: 4, name: 'Kavita Joshi', phone: '+91 98888 33221', source: 'Website', stage: 'Negotiation', owner: 'Ravi', score: 88, last: '18 Sep', touches: 8 },
+                { id: 5, name: 'Suresh Verma', phone: '+91 97777 88990', source: 'Referral', stage: 'Won', owner: 'Priya', score: 96, last: '16 Sep', touches: 9 }],
+            rooms: [['101', 'Deluxe Garden', 'Available'], ['102', 'Deluxe Garden', 'Occupied'], ['201', 'Premium Suite', 'Cleaning'], ['202', 'Premium Suite', 'Available'], ['301', 'Villa', 'Maintenance'], ['302', 'Villa', 'Reserved']],
+            bookings: [['BK-1042', 'Rahul Sharma', '18 Sep', '21 Sep', 'Villa', 'Confirmed'], ['BK-1043', 'Neha Kapoor', '20 Sep', '22 Sep', 'Premium Suite', 'Pending'], ['BK-1044', 'Arjun Mehta', '25 Sep', '27 Sep', 'Deluxe Garden', 'Confirmed']]
+        };
+
+        function icon(name, size = 18) {
+            const p = {
+                dashboard: '<rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>',
+                leads: '<circle cx="9" cy="8" r="3"/><path d="M3 20c.7-3.5 3-5 6-5s5.3 1.5 6 5"/><path d="M16 5.5a3 3 0 0 1 0 5.8"/><path d="M18 15c1.7.5 2.8 1.7 3 4"/>',
+                pipeline: '<path d="M4 6h16M7 12h10M10 18h4"/>',
+                quote: '<path d="M6 3h9l3 3v15H6z"/><path d="M9 12h6M9 16h6M9 8h3"/>',
+                booking: '<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M7 3v4M17 3v4M3 10h18"/><path d="M8 14h2M14 14h2M8 18h2"/>',
+                room: '<path d="M4 19V8l8-4 8 4v11"/><path d="M4 19h16M7 19v-6h10v6M9 10h2M13 10h2"/>',
+                guest: '<circle cx="12" cy="8" r="3.5"/><path d="M4 21c.8-4.2 3.5-6.5 8-6.5s7.2 2.3 8 6.5"/>',
+                payment: '<rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 10h18M7 15h4"/>',
+                stay: '<path d="M4 18V8a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v10"/><path d="M4 14h16M7 11h4"/>',
+                housekeeping: '<path d="M5 19h14M8 19l2-8h4l2 8M10 7h4M12 4v3"/>',
+                inventory: '<path d="M4 7l8-4 8 4-8 4z"/><path d="M4 7v10l8 4 8-4V7M8 9l8 4"/>',
+                package: '<path d="M4 7h16v13H4z"/><path d="M8 7V5a4 4 0 0 1 8 0v2M4 11h16"/>',
+                event: '<rect x="4" y="5" width="16" height="15" rx="2"/><path d="M8 3v4M16 3v4M4 10h16M8 14h2M14 14h2"/>',
+                support: '<circle cx="12" cy="12" r="9"/><path d="M8.5 9a3.5 3.5 0 0 1 7 0c0 2-2 2.5-3.5 3.5v1"/><circle cx="12" cy="17" r=".7" fill="currentColor" stroke="none"/>',
+                marketing: '<path d="M4 11h5l8-4v10l-8-4H4z"/><path d="M9 15l1.5 4M19 9v6"/>',
+                reports: '<path d="M4 19V5M4 19h16"/><path d="M8 16v-5M12 16V8M16 16v-9M20 16v-5"/>',
+                users: '<circle cx="9" cy="8" r="3"/><path d="M3 20c.7-3.5 2.8-5.5 6-5.5s5.3 2 6 5.5"/><path d="M17 11h4M19 9v4"/>',
+                settings: '<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.8 1.8 0 0 0 .3 2l.1.1-2.1 2.1-.1-.1a1.8 1.8 0 0 0-2-.3 1.8 1.8 0 0 0-1 1.7V21h-3v-.5a1.8 1.8 0 0 0-1-1.7 1.8 1.8 0 0 0-2 .3l-.1.1-2.1-2.1.1-.1a1.8 1.8 0 0 0 .3-2 1.8 1.8 0 0 0-1.7-1H4v-3h.5a1.8 1.8 0 0 0 1.7-1 1.8 1.8 0 0 0-.3-2l-.1-.1 2.1-2.1.1.1a1.8 1.8 0 0 0 2 .3 1.8 1.8 0 0 0 1-1.7V3h3v.5a1.8 1.8 0 0 0 1 1.7 1.8 1.8 0 0 0 2-.3l.1-.1 2.1 2.1-.1.1a1.8 1.8 0 0 0-.3 2 1.8 1.8 0 0 0 1.7 1h.5v3h-.5a1.8 1.8 0 0 0-1.7 1z"/>',
+                add: '<path d="M12 5v14M5 12h14"/>',
+                alert: '<path d="M12 3l9 16H3z"/><path d="M12 9v4M12 16v1"/>',
+                arrowIn: '<path d="M4 12h13M13 7l5 5-5 5M19 4v16"/>',
+                arrowOut: '<path d="M20 12H7M11 7l-5 5 5 5M5 4v16"/>',
+                chart: '<path d="M4 19V5M4 19h16"/><path d="M7 15l3-4 3 2 5-6"/>',
+                file: '<path d="M6 3h8l4 4v14H6z"/><path d="M14 3v5h5M9 13h6M9 17h6"/>',
+                card: '<rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 10h18"/>',
+                calendar: '<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M7 3v4M17 3v4M3 10h18"/>',
+                mail: '<rect x="3" y="5" width="18" height="14" rx="2"/><path d="m4 7 8 6 8-6"/>',
+                whatsapp: '<path d="M20 11.5a8 8 0 0 1-11.8 7L4 20l1.5-4.1A8 8 0 1 1 20 11.5z"/><path d="M9 9c.5 2 1.5 3 3.5 3.7l1.3-1.1"/>',
+                instagram: '<rect x="4" y="4" width="16" height="16" rx="4"/><circle cx="12" cy="12" r="3.5"/><circle cx="17.2" cy="6.8" r="1"/>',
+                google: '<path d="M20 12a8 8 0 1 1-2.3-5.7"/><path d="M20 6v6h-6"/>',
+                download: '<path d="M12 3v11M7 10l5 5 5-5M4 20h16"/>',
+                eye: '<path d="M2.5 12s3.5-6 9.5-6 9.5 6 9.5 6-3.5 6-9.5 6-9.5-6-9.5-6z"/><circle cx="12" cy="12" r="2.5"/>',
+                filter: '<path d="M4 6h16M7 12h10M10 18h4"/>',
+                chevron: '<path d="m8 10 4 4 4-4"/>'
+            };
+            return '<span class="icon" aria-hidden="true"><svg width="' + size + '" height="' + size + '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">' + (p[name] || p.dashboard) + '</svg></span>';
+        }
+
+
+        function initIcons() {
+            document.querySelectorAll('[data-icon]').forEach(function (el) {
+                el.outerHTML = icon(el.getAttribute('data-icon'), 17);
+            });
+        }
+
+        function toast(msg) { let t = document.getElementById('toast'); t.textContent = msg; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 2200) }
+        let pageHistory = [], currentPage = 'dashboard';
+        function go(page, push = true) { if (push && currentPage !== page) pageHistory.push(currentPage); currentPage = page; document.querySelectorAll('.nav button').forEach(x => x.classList.remove('active')); let n = document.getElementById('nav-' + page); if (n) n.classList.add('active'); render(page) }
+        function backPage() { if (pageHistory.length) { let p = pageHistory.pop(); currentPage = p; render(p) } else go('dashboard', false) }
+        function closeDrawer() { document.getElementById('drawer').classList.remove('show'); document.getElementById('overlay').classList.remove('show') }
+        function openDrawer(title, html) { document.getElementById('drawer').innerHTML = '<div class="modalhead"><h2>' + title + '</h2><button class="close" onclick="closeDrawer()">✕</button></div>' + html; document.getElementById('drawer').classList.add('show'); document.getElementById('overlay').classList.add('show') }
+        function notifications() { openDrawer('Notifications', '<div class="notice">' + icon('alert', 15) + ' <b>6 notifications</b> require attention.</div>' + [['🔴', 'Room 301 maintenance overdue', 'Housekeeping'], ['🟠', 'Payment ₹30,000 received', 'Finance / BK-1042'], ['🟡', 'Follow-up due: Neha Kapoor', 'Sales'], ['🔵', 'New Instagram enquiry', 'Leads'], ['🟢', 'Event reminder queued', 'Events'], ['🟠', 'REQ-883 needs approval', 'Procurement']].map(x => '<div class="doc"><div><b>' + x[0] + ' ' + x[1] + '</b><small class="muted" style="display:block">' + x[2] + '</small></div><button class="btn sm" onclick="toast(\'Notification opened\')">Open</button></div>').join('') + '<button class="btn" onclick="toast(\'All notifications marked read\');closeDrawer()">Mark all read</button>') }
+        function userProfile() { openDrawer('My Profile', '<div style="text-align:center"><div class="avatar" style="width:72px;height:72px;margin:auto;font-size:25px">BJ</div><h2>Bhairav Jangid</h2><div class="muted">Super Admin • Management</div></div><div class="section-title">Profile</div>' + [['Email', 'bhairav@example.com'], ['Phone', '+91 98765 43210'], ['Department', 'Management'], ['Role', 'Super Admin'], ['Last Login', '19 Sep 2026, 12:58 PM']].map(x => '<div class="doc"><span>' + x[0] + '</span><b>' + x[1] + '</b></div>').join('') + '<div class="section-title">Security</div><button class="btn" onclick="toast(\'Password change opened\')">Change Password</button> <button class="btn" onclick="toast(\'MFA settings opened\')">MFA</button>') }
+
+        function openModal(type, data = {}) {
+            document.getElementById('modalbox').classList.remove('report-modal');
+            let m = document.getElementById('modal'), b = document.getElementById('modalbox'); m.classList.add('show');
+            let close = `<button class="close" onclick="closeModal()">✕</button>`;
+            if (type === 'quick') b.innerHTML = `
+<div class="modalhead">
+    <div>
+        <div class="eyebrow">RESORT OPERATIONS</div>
+        <h2>Quick Add</h2>
+        <div class="muted">Create a record without leaving your current workflow.</div>
+    </div>
+    ${close}
+</div>
+
+<div class="quick-grid">
+    <button class="quick-card" onclick="closeModal();go('leads');setTimeout(function(){openModal('lead')},100)">
+        <span class="quick-icon">${icon('leads', 17)}</span>
+        <span><b>Add Lead</b><small>New enquiry</small></span>
+    </button>
+
+    <button class="quick-card" onclick="closeModal();go('quotations');setTimeout(function(){openModal('quotation')},100)">
+        <span class="quick-icon">${icon('quote', 17)}</span>
+        <span><b>Create Quotation</b><small>Send proposal</small></span>
+    </button>
+
+    <button class="quick-card" onclick="closeModal();go('bookings');setTimeout(function(){openModal('booking')},100)">
+        <span class="quick-icon">${icon('booking', 17)}</span>
+        <span><b>Create Booking</b><small>Reserve a room</small></span>
+    </button>
+
+    <button class="quick-card" onclick="closeModal();go('events');setTimeout(function(){openModal('event')},100)">
+        <span class="quick-icon">${icon('event', 17)}</span>
+        <span><b>Create Event</b><small>Plan & notify</small></span>
+    </button>
+
+    <button class="quick-card" onclick="closeModal();go('support');setTimeout(function(){openModal('feedback')},100)">
+        <span class="quick-icon">${icon('support', 17)}</span>
+        <span><b>Log Feedback</b><small>Complaint / incident</small></span>
+    </button>
+
+    <button class="quick-card" onclick="closeModal();go('inventory');setTimeout(function(){openModal('request')},100)">
+        <span class="quick-icon">${icon('inventory', 17)}</span>
+        <span><b>New Requirement</b><small>Department request</small></span>
+    </button>
+</div>
+`;
+
+
+            if (type === 'guest') b.innerHTML = `<div class="modalhead"><div><div class="eyebrow">GUEST MANAGEMENT</div><h2>Create Guest Profile</h2></div>${close}</div>
+<div class="formgrid">
+${field('First Name', 'gFirst', 'Rahul')}${field('Last Name', 'gLast', 'Sharma')}
+${field('Mobile Number', 'gPhone', '+91 98765 43210')}${field('Email', 'gEmail', 'rahul@example.com')}
+${field('Date of Birth', 'gDob', '15 Aug 1992')}${field('Nationality', 'gNationality', 'Indian')}
+${field('ID Type', 'gIdType', 'Aadhaar', ['Aadhaar', 'Passport', 'Driving Licence', 'Other'])}${field('ID Number', 'gIdNumber', 'XXXX-XXXX-1234')}
+${field('Guest Type', 'gType', 'Individual', ['Individual', 'Corporate', 'Travel Agent', 'VIP'])}${field('Preferred Room', 'gRoom', 'Villa', ['Deluxe Garden', 'Premium Suite', 'Villa', 'Any'])}
+<div class="field full"><label>Preferences</label><div class="checklist"><label><input type="checkbox" checked> Vegetarian / dietary preference</label><label><input type="checkbox"> Airport transfer</label><label><input type="checkbox"> Spa preference</label><label><input type="checkbox"> Quiet room</label></div></div>
+<div class="field full"><label>Notes</label><textarea>Returning guest. Prefer garden-facing room.</textarea></div>
+</div>
+<div class="notice">${icon('guest', 15)} Guest profile will be available to Sales, Front Desk, Housekeeping and Support based on permissions.</div><br>
+<div class="right" style="display:flex;justify-content:flex-end;gap:8px"><button class="btn" onclick="closeModal()">Cancel</button><button class="btn primary" onclick="saveGuest()">${icon('guest', 15)} Create Guest Profile</button></div>`;
+
+            if (type === 'payment') b.innerHTML = `<div class="modalhead"><div><div class="eyebrow">FINANCE</div><h2>Record Payment</h2></div>${close}</div>
+<div class="formgrid">
+${field('Booking / Invoice', 'payBooking', 'BK-1042 / INV-1042')}${field('Guest', 'payGuest', 'Rahul Sharma')}
+${field('Amount', 'payAmount', '30000')}${field('Payment Date', 'payDate', '19 Sep 2026')}
+${field('Payment Method', 'payMethod', 'UPI', ['UPI', 'Card', 'Cash', 'Bank Transfer', 'Payment Gateway'])}${field('Transaction / Reference', 'payRef', 'TXN98322')}
+${field('Payment Type', 'payType', 'Advance', ['Advance', 'Partial', 'Full Settlement', 'Refund'])}${field('Collected By', 'payBy', 'Finance Desk')}
+<div class="field full"><label>Notes</label><textarea>Advance payment received against confirmed booking.</textarea></div>
+</div>
+<div class="grid g3"><div class="card"><span class="muted">Invoice Total</span><div class="stat" style="font-size:20px">₹40,120</div></div><div class="card"><span class="muted">This Payment</span><div class="stat green" style="font-size:20px">₹30,000</div></div><div class="card"><span class="muted">Balance</span><div class="stat amber" style="font-size:20px">₹10,120</div></div></div><br>
+<div class="right" style="display:flex;justify-content:flex-end;gap:8px"><button class="btn" onclick="closeModal()">Cancel</button><button class="btn primary" onclick="savePayment()">${icon('payment', 15)} Record Payment & Generate Receipt</button></div>`;
+
+            if (type === 'room') b.innerHTML = `<div class="modalhead"><div><div class="eyebrow">ROOM INVENTORY</div><h2>Add / Edit Room</h2></div>${close}</div>
+<div class="formgrid">
+${field('Room Number', 'roomNo', '303')}
+${field('Room Type', 'roomType', 'Premium Suite', ['Deluxe Garden', 'Premium Suite', 'Villa', 'Cottage', 'Pool Villa'])}
+${field('Floor', 'roomFloor', '3')}
+${field('Building / Wing', 'roomWing', 'East Wing')}
+${field('Status', 'roomStatus', 'Available', ['Available', 'Occupied', 'Reserved', 'Cleaning', 'Maintenance', 'Out of Service'])}
+${field('Max Guests', 'roomGuests', '2')}
+${field('Base Rate / Night', 'roomRate', '12500')}
+${field('Extra Bed Rate', 'roomExtra', '2500')}
+${field('View', 'roomView', 'Garden View', ['Garden View', 'Pool View', 'Lake View', 'Courtyard View'])}
+${field('Bed Type', 'roomBed', 'King Bed', ['King Bed', 'Twin Bed', 'Queen Bed', 'King + Sofa Bed'])}
+<div class="field full"><label>Amenities</label><div class="checklist">${['Wi-Fi', 'Air Conditioning', 'Breakfast', 'Smart TV', 'Mini Bar', 'Bathtub', 'Balcony', 'Work Desk'].map(x => `<label><input type="checkbox" checked> ${x}</label>`).join('')}</div></div>
+<div class="field full"><label>Room Notes</label><textarea>Premium suite with garden-facing balcony.</textarea></div>
+</div>
+<div class="room-form-preview"><b>Inventory preview</b><div class="muted">Room 303 • Premium Suite • East Wing • 2 guests • ₹12,500/night</div></div><br>
+<button class="btn primary" onclick="saveRoom()">Create Room</button>`;
+            if (type === 'lead') b.innerHTML = `<div class="modalhead"><h2>Add / Edit Lead</h2>${close}</div><div class="formgrid">
+${field('Full Name', 'leadName', 'Rahul Sharma')}${field('Phone', 'leadPhone', '+91')}
+${field('Email', 'leadEmail', 'guest@example.com')}${field('Lead Source', 'leadSource', 'Instagram', ['Instagram', 'Facebook', 'Google Ads', 'WhatsApp', 'Website', 'Referral', 'Walk-in'])}
+${field('Assigned Salesperson', 'leadOwner', 'Amit', ['Amit', 'Priya', 'Ravi', 'Sneha'])}${field('Expected Stay', 'leadStay', '20 Sep - 22 Sep')}
+${field('Adults', 'leadAdults', '2')}${field('Children', 'leadChildren', '0')}
+${field('Budget', 'leadBudget', '50000')}${field('Preferred Room', 'leadRoom', 'Villa', ['Villa', 'Premium Suite', 'Deluxe Garden'])}
+<div class="field full"><label>Requirements / Notes</label><textarea id="leadNotes">Airport pickup, private dinner</textarea></div>
+</div><div class="right"><button class="btn" onclick="closeModal()">Cancel</button> <button class="btn primary" onclick="saveLead()">Save Lead</button></div>`;
+            if (type === 'quotation') b.innerHTML = `<div class="modalhead"><h2>Create Quotation</h2>${close}</div><div class="formgrid">
+${field('Lead / Guest', 'qGuest', 'Rahul Sharma')}${field('Validity', 'qValidity', '7 days')}
+${field('Check-in', 'qIn', '20 Sep')}${field('Check-out', 'qOut', '22 Sep')}
+${field('Room / Package', 'qRoom', 'Villa - 2 Nights')}${field('Rate', 'qRate', '36000')}
+${field('Activities', 'qActivities', 'Safari + Dinner')}${field('Discount', 'qDiscount', '2000')}
+<div class="field full"><label>Taxes / Terms</label><textarea>18% GST. 50% advance to confirm booking. Cancellation as per resort policy.</textarea></div></div>
+<div class="notice">Live total: <b id="qtotal">₹40,120</b></div><br><button class="btn primary" onclick="toast('Quotation Q-204 created');closeModal()">Create & Preview</button>`;
+            if (type === 'booking') b.innerHTML = `<div class="modalhead"><h2>Create Booking</h2>${close}</div><div class="formgrid">
+${field('Guest', 'bGuest', 'Rahul Sharma')}${field('Room', 'bRoom', 'Villa', ['Villa', 'Premium Suite', 'Deluxe Garden'])}
+${field('Check-in', 'bIn', '20 Sep')}${field('Check-out', 'bOut', '22 Sep')}
+${field('Adults', 'bAdults', '2')}${field('Children', 'bChildren', '1')}
+${field('Package', 'bPackage', 'Romantic Escape')}${field('Booking Source', 'bSource', 'Direct', ['Direct', 'Website', 'OTA', 'Agent', 'Corporate'])}
+<div class="field full"><label>Special Requests</label><textarea>Late checkout if available</textarea></div></div><button class="btn primary" onclick="toast('Booking BK-1045 created and confirmation sent');closeModal()">Confirm Booking</button>`;
+
+            if (type === 'eventDetails') b.innerHTML = `<div class="modalhead"><div><div class="eyebrow">EVENT MANAGEMENT</div><h2>Diwali Gala Night</h2><span class="badge bgreen">Published</span></div>${close}</div>
+<div class="grid g3">
+<div class="card"><span class="muted">Date</span><div class="stat" style="font-size:19px">31 Oct 2026</div></div>
+<div class="card"><span class="muted">Venue</span><div class="stat" style="font-size:19px">Vana Lawn</div></div>
+<div class="card"><span class="muted">Capacity</span><div class="stat" style="font-size:19px">150</div></div>
+</div>
+<div class="status-flow"><span class="status-step done">Created</span><span>→</span><span class="status-step done">Published</span><span>→</span><span class="status-step current">Invitations</span><span>→</span><span class="status-step">Event Day</span><span>→</span><span class="status-step">Closed</span></div>
+<div class="tabs"><button class="tab active">Overview</button><button class="tab" onclick="toast('Attendee list opened')">Attendees 118</button><button class="tab" onclick="toast('Vendor list opened')">Vendors</button><button class="tab" onclick="toast('Event expenses opened')">Expenses</button><button class="tab" onclick="toast('Event feedback opened')">Feedback</button></div>
+<div class="grid g2">
+<div class="card"><h3>Event Information</h3><p><b>Time:</b> 7:00 PM – 11:00 PM</p><p><b>Organizer:</b> Events Manager</p><p><b>Audience:</b> In-house Guests + Selected Customers</p><p><b>Expected:</b> 118 / 150 attendees</p><p><b>Notifications:</b> WhatsApp ✓ Email ✓ In-app ✓</p></div>
+<div class="card"><h3>Operations Checklist</h3>${['Venue setup', 'Catering confirmed', 'AV / music', 'Security assigned', 'Guest list finalized', 'Parking plan', 'Post-event cleanup'].map(x => `<label style="display:block;padding:7px"><input type="checkbox" checked> ${x}</label>`).join('')}</div>
+</div><br>
+<div class="card"><h3>Event Actions</h3><button class="btn primary" onclick="toast('Reminder sent to 118 attendees')">${icon('mail', 14)} Send Reminder</button> <button class="btn" onclick="toast('Attendee QR list generated')">${icon('file', 14)} Guest List</button> <button class="btn" onclick="toast('Event edited')">Edit Event</button> <button class="btn danger" onclick="toast('Event cancellation workflow opened')">Cancel Event</button></div>`;
+
+            if (type === 'event') b.innerHTML = `<div class="modalhead"><h2>Create Resort Event</h2>${close}</div><div class="formgrid">
+${field('Event Name', 'eName', 'Diwali Gala Night')}${field('Event Type', 'eType', 'Private Event', ['Private Event', 'Wedding', 'Corporate', 'Resort Event', 'Activity'])}
+${field('Date', 'eDate', '31 Oct 2026')}${field('Time', 'eTime', '19:00 - 23:00')}
+${field('Venue / Lawn / Hall', 'eVenue', 'Vana Lawn / Poolside')}${field('Capacity', 'eCap', '150')}
+${field('Invite Segment', 'eSegment', 'In-house Guests', ['In-house Guests', 'VIP Guests', 'Selected Customers', 'Employees', 'All Users'])}
+<div class="field full"><label>Notification Channels</label><div class="checklist"><label><input type="checkbox" checked> WhatsApp</label><label><input type="checkbox" checked> Email</label><label><input type="checkbox" checked> In-app</label><label><input type="checkbox"> SMS</label></div></div></div>
+<button class="btn primary" onclick="toast('Event created • notifications queued for selected users');closeModal()">Create & Notify</button>`;
+            if (type === 'feedback') b.innerHTML = `<div class="modalhead"><h2>Support / Feedback</h2>${close}</div><div class="formgrid">
+${field('Raised By', 'fBy', 'Employee', ['Employee', 'Client'])}${field('Guest / Booking', 'fGuest', 'Rahul Sharma / BK-1042')}
+${field('Category', 'fCat', 'Property Damage', ['Property Damage', 'Complaint', 'Suggestion', 'Compliment', 'Service Issue', 'Lost & Found'])}${field('Priority', 'fPriority', 'High', ['Low', 'Medium', 'High', 'Critical'])}
+<div class="field full"><label>Description / Proof Details</label><textarea>Glass table damaged in room 302 after guest checkout.</textarea></div>
+<div class="field full"><label>Evidence</label><input type="file" multiple><small class="muted">Images, invoices, videos, documents accepted.</small></div></div>
+<button class="btn danger" onclick="toast('Internal incident logged with evidence');closeModal()">Log Incident</button> <button class="btn primary" onclick="toast('Client feedback submitted • Google review workflow triggered');closeModal()">Submit Client Feedback</button>`;
+            if (type === 'request') b.innerHTML = `<div class="modalhead"><h2>Department Requirement</h2>${close}</div><div class="formgrid">
+${field('Requested By', 'rBy', 'Chef - Kitchen')}${field('Department', 'rDept', 'Procurement', ['Procurement', 'Finance', 'Maintenance', 'Housekeeping', 'Kitchen', 'HR', 'IT', 'Management'])}
+${field('Request Type', 'rType', 'Grocery Purchase', ['Grocery Purchase', 'Payment Request', 'Maintenance', 'Staff Requirement', 'IT Support', 'Stock Refill'])}${field('Priority', 'rPri', 'Normal', ['Low', 'Normal', 'High', 'Urgent'])}
+${field('Amount', 'rAmt', '12500')}${field('Needed By', 'rDate', '20 Sep')}
+<div class="field full"><label>Details</label><textarea>Vegetables, dairy, dry goods for weekend occupancy.</textarea></div></div>
+<button class="btn primary" onclick="toast('REQ-883 submitted to Procurement');closeModal()">Submit Request</button>`;
+            if (type === 'package') b.innerHTML = `<div class="modalhead"><h2>Create Package</h2>${close}</div><div class="formgrid">${field('Package Name', 'pName', 'Romantic Escape')}${field('Category', 'pCat', 'Couples', ['Couples', 'Family', 'Adventure', 'Corporate', 'Wellness', 'Seasonal'])}${field('Price', 'pPrice', '18000')}${field('Validity', 'pValid', '30 days')}${field('Room Type', 'pRoom', 'Villa', ['Deluxe Garden', 'Premium Suite', 'Villa', 'Any'])}${field('Max Guests', 'pGuests', '2')}<div class="field full"><label>Inclusions</label><textarea>2 nights stay, breakfast, private dinner, decoration and sunset activity</textarea></div><div class="field full"><label>Activities</label><div class="checklist">${['Safari', 'Spa', 'Pool', 'Trekking', 'Bonfire', 'Private Dinner', 'Airport Transfer'].map(x => `<label><input type="checkbox"> ${x}</label>`).join('')}</div></div></div><button class="btn primary" onclick="toast('Package created and available in quotations');closeModal()">Create Package</button>`;
+            if (type === 'user') b.innerHTML = `<div class="modalhead"><h2>Create User</h2>${close}</div><div class="formgrid">${field('Full Name', 'uName', 'Ramesh Kumar')}${field('Email', 'uEmail', 'ramesh@resort.com')}${field('Phone', 'uPhone', '+91 98765 00000')}${field('Role', 'uRole', 'Housekeeper', ['Admin', 'Manager / PA', 'Sales', 'Front Desk', 'Chef / Kitchen', 'Housekeeper', 'Maintenance', 'Finance', 'Event Manager', 'Marketing', 'Viewer'])}${field('Department', 'uDept', 'Housekeeping', ['Management', 'Sales', 'Front Desk', 'Kitchen', 'Housekeeping', 'Maintenance', 'Finance', 'Events', 'Marketing', 'IT'])}${field('Employee ID', 'uEmp', 'EMP-104')}</div><div class="section-title">Permissions</div><div class="checklist">${['Create', 'Read', 'Update', 'Delete', 'View UI components', 'Export', 'Approve'].map(x => `<label><input type="checkbox" ${x === 'Delete' ? '' : 'checked'}> ${x}</label>`).join('')}</div><button class="btn primary" onclick="toast('User created and invite sent');closeModal()">Create Account</button>`;
+            if (type === 'houseAssign') b.innerHTML = `<div class="modalhead"><h2>Assign Housekeeping Task</h2>${close}</div><div class="formgrid">${field('Room', 'hRoom', '301', ['101', '102', '201', '202', '301', '302'])}${field('Task', 'hTask', 'Deep Cleaning', ['Checkout Cleaning', 'Deep Cleaning', 'Inspection', 'Linen Change', 'Minibar Refill', 'Maintenance Handoff'])}${field('Assigned Staff', 'hStaff', 'Pooja', ['Pooja', 'Ramesh', 'Anita', 'Sunita', 'Manager'])}${field('Priority', 'hPriority', 'High', ['Low', 'Normal', 'High', 'Urgent'])}${field('Due Time', 'hDue', '14:30')}${field('Supervisor', 'hSup', 'Housekeeping Manager')}</div><div class="section-title">Checklist</div><div class="checklist">${['Bed & linen', 'Bathroom sanitation', 'Dusting & vacuum', 'Minibar', 'Amenities', 'Inventory count', 'Damage inspection', 'Photos before ready'].map(x => `<label><input type="checkbox" checked> ${x}</label>`).join('')}</div><button class="btn primary" onclick="toast('Housekeeping task assigned successfully');closeModal()">Assign Task</button>`;
+            if (type === 'leadDetails') b.innerHTML = leadDetails(data);
+        }
+        function closeModal() { document.getElementById('modal').classList.remove('show') }
+        function field(label, id, value = '', options) { if (Array.isArray(options)) return `<div class="field"><label>${label}</label><select id="${id}">${options.map(x => `<option>${x}</option>`).join('')}</select></div>`; return `<div class="field"><label>${label}</label><input id="${id}" value="${value}"></div>` }
+
+
+        function togglePageForm(id) {
+            const form = document.getElementById(id);
+            if (!form) return;
+            const isHidden = form.style.display === 'none' || getComputedStyle(form).display === 'none';
+            form.style.display = isHidden ? 'block' : 'none';
+            if (isHidden) form.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+        function savePageGuest() { const first = document.getElementById('pageGFirst')?.value || 'New'; const last = document.getElementById('pageGLast')?.value || 'Guest'; toast((first + ' ' + last).trim() + ' guest profile created'); go('guests'); }
+        function savePagePayment() { const amount = document.getElementById('pagePayAmount')?.value || '0'; const ref = document.getElementById('pagePayRef')?.value || 'NEW'; toast('Payment of ₹' + amount + ' recorded • ' + ref + ' • receipt generated'); go('payments'); }
+
+        function saveGuest() {
+            const first = document.getElementById('gFirst')?.value || 'New';
+            const last = document.getElementById('gLast')?.value || 'Guest';
+            closeModal();
+            toast((first + ' ' + last).trim() + ' guest profile created');
+            go('guests');
+        }
+        function savePayment() {
+            const amount = document.getElementById('payAmount')?.value || '0';
+            const ref = document.getElementById('payRef')?.value || 'NEW';
+            closeModal();
+            toast('Payment of ₹' + amount + ' recorded • ' + ref + ' • receipt generated');
+            go('payments');
+        }
+        function saveRoom() {
+            const roomNo = document.getElementById('roomNo')?.value || 'New';
+            const type = document.getElementById('roomType')?.value || 'Room';
+            const status = document.getElementById('roomStatus')?.value || 'Available';
+            closeModal();
+            toast('Room ' + roomNo + ' created as ' + type + ' • ' + status);
+            go('rooms');
+        }
+
+        function saveLead() { let n = document.getElementById('leadName').value || 'New Lead'; state.leads.unshift({ id: Date.now(), name: n, phone: document.getElementById('leadPhone').value, source: document.getElementById('leadSource').value, stage: 'New', owner: document.getElementById('leadOwner').value, score: 50, last: 'Just now', touches: 0 }); closeModal(); toast('Lead created successfully'); go('leads') }
+        function leadDetails(l) {
+            return `<div class="modalhead"><div><h2>${l.name}</h2><span class="badge bblue">${l.stage}</span></div><button class="close" onclick="closeModal()">✕</button></div>
+<div class="grid g3"><div class="card"><span class="muted">Lead Score</span><div class="stat blue">${l.score}/100</div></div><div class="card"><span class="muted">Times Contacted</span><div class="stat">${l.touches}</div></div><div class="card"><span class="muted">Owner</span><div class="stat" style="font-size:19px">${l.owner}</div></div></div>
+<div class="section-title">Contact & Qualification</div><div class="grid g2"><div class="card"><p><b>Phone:</b> ${l.phone}</p><p><b>Source:</b> ${l.source}</p><p><b>Last Contact:</b> ${l.last}</p><p><b>Preferred stay:</b> 20–22 Sep</p></div><div class="card"><p><b>Budget:</b> ₹50,000</p><p><b>Guests:</b> 2 adults, 1 child</p><p><b>Interest:</b> Villa + Romantic Escape</p><p><b>Next task:</b> Call tomorrow at 11:00 AM</p></div></div>
+<div class="section-title">Complete Contact History</div><div class="timeline"><div class="event"><b>Amit called the guest</b><small>18 Sep, 4:10 PM • Connected • 8 min • Discussed villa availability</small></div><div class="event"><b>WhatsApp message sent</b><small>18 Sep, 1:25 PM • Seen • Brochure shared</small></div><div class="event"><b>Priya emailed quotation</b><small>17 Sep, 6:02 PM • Opened twice • Q-204</small></div><div class="event"><b>Lead created</b><small>16 Sep, 10:30 AM • Source: ${l.source}</small></div></div>
+<div class="section-title">Activity Actions</div><div class="flow"><button class="btn primary" onclick="toast('Call logged');closeModal()">📞 Log Call</button><button class="btn" onclick="toast('WhatsApp message opened')">💬 WhatsApp</button><button class="btn" onclick="toast('Email composer opened')">✉️ Email</button><button class="btn" onclick="toast('Task created')">✓ Create Task</button><button class="btn" onclick="toast('Lead moved to Qualified')">Move Stage</button></div>`}
+
+
+        function leadFilter(type, el) {
+            document.querySelectorAll('.tabs .tab').forEach(function (x) {
+                x.classList.remove('active');
+            });
+
+            if (el) el.classList.add('active');
+
+            let leads = [...state.leads];
+
+            if (type === 'mine') {
+                leads = leads.filter(function (x) {
+                    return x.owner === 'Amit';
+                });
+            }
+
+            if (type === 'unassigned') {
+                leads = leads.filter(function (x) {
+                    return !x.owner;
+                });
+            }
+
+            if (type === 'followups') {
+                leads = leads.filter(function (x) {
+                    return x.stage !== 'Won' && x.stage !== 'Lost' && x.id % 2 === 1;
+                });
+            }
+
+            const sourceEl = document.getElementById('leadSourceFilter');
+            const stageEl = document.getElementById('leadStageFilter');
+            const searchEl = document.getElementById('leadSearch');
+
+            const source = sourceEl ? sourceEl.value : '';
+            const stage = stageEl ? stageEl.value : '';
+            const search = searchEl ? searchEl.value.toLowerCase().trim() : '';
+
+            if (source && source !== 'All Sources') {
+                leads = leads.filter(function (x) {
+                    return x.source === source;
+                });
+            }
+
+            if (stage && stage !== 'All Stages') {
+                leads = leads.filter(function (x) {
+                    return x.stage === stage;
+                });
+            }
+
+            if (search) {
+                leads = leads.filter(function (x) {
+                    const text = [
+                        x.name,
+                        x.phone,
+                        x.owner,
+                        x.source,
+                        x.stage
+                    ].join(' ').toLowerCase();
+
+                    return text.includes(search);
+                });
+            }
+
+            const wrapper = document.getElementById('leadTableWrap');
+
+            if (!wrapper) return;
+
+            const tbody = wrapper.querySelector('tbody');
+
+            if (!tbody) return;
+
+            tbody.innerHTML = leads.map(function (lead) {
+                const followUp =
+                    lead.stage === 'Won'
+                        ? '—'
+                        : lead.id % 2 === 1
+                            ? 'Today 4 PM'
+                            : 'Tomorrow 11 AM';
+
+                return `
+            <tr class="clickable-row">
+                <td>
+                    <b>${lead.name}</b>
+                    <br>
+                    <span class="muted">${lead.phone}</span>
+                </td>
+                <td>${lead.source}</td>
+                <td>
+                    <span class="badge ${lead.stage === 'Won'
+                        ? 'bgreen'
+                        : lead.stage === 'New'
+                            ? 'bblue'
+                            : 'bamber'
+                    }">${lead.stage}</span>
+                </td>
+                <td>${lead.owner || 'Unassigned'}</td>
+                <td>${lead.score}</td>
+                <td>${lead.touches} times</td>
+                <td>${lead.last}</td>
+                <td>${followUp}</td>
+                <td>
+                    <button
+                        class="btn sm"
+                        onclick="openLeadDetails(${Number(lead.id)})"
+                    >
+                        View
+                    </button>
+                </td>
+            </tr>
+        `;
+            }).join('');
+        }
+
+        function openLeadDetails(id) {
+            const lead = state.leads.find(function (x) {
+                return Number(x.id) === Number(id);
+            });
+
+            if (!lead) {
+                toast('Lead not found');
+                return;
+            }
+
+            openModal('leadDetails', lead);
+        }
+
+
+        function reportPreview(type) {
+            const reports = {
+                Occupancy: { value: '78%', sub: 'Rooms occupied by room type', k1: 'Rooms Sold', v1: '39', k2: 'Available', v2: '11', k3: 'ADR', v3: '₹9,420' },
+                Revenue: { value: '₹18.4L', sub: 'Room, package and activity revenue', k1: 'Room Revenue', v1: '₹11.2L', k2: 'Packages', v2: '₹3.8L', k3: 'Activities', v3: '₹1.7L' },
+                Sales: { value: '18.6%', sub: 'Lead to booking conversion', k1: 'Open Leads', v1: '128', k2: 'Qualified', v2: '22', k3: 'Won', v3: '8' },
+                'Marketing ROI': { value: '3.8x', sub: 'Attributed revenue / marketing spend', k1: 'Attributed Revenue', v1: '₹8.6L', k2: 'Spend', v2: '₹2.25L', k3: 'Bookings', v3: '31' },
+                'Guest Satisfaction': { value: '4.6/5', sub: 'Guest ratings and service recovery', k1: 'Positive', v1: '92%', k2: 'Open Cases', v2: '4', k3: 'Reviews', v3: '86' }
+            };
+            const d = reports[type];
+            if (!d) { toast('Report not found'); return; }
+            const rows = ['15 Sep', '16 Sep', '17 Sep', '18 Sep', '19 Sep'].map(function (date, i) {
+                return `<tr><td>${date}</td><td>${18 + i}</td><td>₹${(2.8 + i * .35).toFixed(2)}L</td><td>${72 + i * 2}%</td><td>${type === 'Guest Satisfaction' ? '4.' + (4 + i % 3) : type === 'Marketing ROI' ? (3.2 + i * .2).toFixed(1) + 'x' : 'Healthy'}</td></tr>`;
+            }).join('');
+            const reportHtml = `
+    <div class="modalhead">
+        <div><div class="eyebrow">LORE RESORTS • REPORT PREVIEW</div><h2>${type}</h2><div class="muted">${d.sub}</div></div>
+        <button class="close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="report-summary">
+        <div class="report-metric"><span class="muted">Headline</span><b>${d.value}</b></div>
+        <div class="report-metric"><span class="muted">${d.k1}</span><b>${d.v1}</b></div>
+        <div class="report-metric"><span class="muted">${d.k2}</span><b>${d.v2}</b></div>
+    </div>
+    <div class="report-body">
+        <div class="card"><h3>Daily Preview</h3><table class="report-table"><tr><th>Date</th><th>Bookings</th><th>Revenue</th><th>Occupancy</th><th>Health</th></tr>${rows}</table></div>
+        <br>
+        <div class="grid g2">
+            <div class="card"><h3>Key Metric</h3><div class="stat green">${d.k3}</div><p class="muted">${d.v3}</p><div class="mini-progress"><span style="width:74%"></span></div></div>
+            <div class="card"><h3>Report Actions</h3><p class="muted">Use this preview to validate the report before export.</p><button class="btn primary" onclick="exportReport('${type}')">${icon('download', 14)} Export CSV</button> <button class="btn" onclick="toast('Print preview opened')">${icon('file', 14)} Print</button></div>
+        </div>
+    </div>`;
+            document.getElementById('modalbox').classList.add('report-modal');
+            openModalHtml(reportHtml);
+        }
+        function openModalHtml(html) {
+            const m = document.getElementById('modal');
+            document.getElementById('modalbox').innerHTML = html;
+            m.classList.add('show');
+        }
+        function exportReport(type) {
+            toast(type + ' CSV generated successfully');
+        }
+        function checkinFlow(mode) {
+            const isCheckIn = mode === 'in';
+
+            const title = isCheckIn
+                ? 'Check-in Workflow'
+                : 'Check-out Workflow';
+
+            const steps = isCheckIn
+                ? ['Reservation', 'Identity', 'Room Handover', 'Complete']
+                : ['Reservation', 'Inspection', 'Folio Review', 'Complete'];
+
+            const checklist = isCheckIn
+                ? [
+                    'Aadhaar / Passport',
+                    'Registration Card',
+                    'Booking Confirmation',
+                    'Advance Receipt'
+                ]
+                : [
+                    'Room inspection',
+                    'Minibar posted',
+                    'Extra services posted',
+                    'Final invoice',
+                    'Payment settlement',
+                    'Feedback request'
+                ];
+
+            const stepHtml = steps.map(function (step, index) {
+                const cls =
+                    index < 2
+                        ? 'done'
+                        : index === 2
+                            ? 'current'
+                            : '';
+
+                return `
+            <span class="status-step ${cls}">
+                ${step}
+            </span>
+            ${index < steps.length - 1 ? '<span>→</span>' : ''}
+        `;
+            }).join('');
+
+            const checklistHtml = checklist.map(function (item) {
+                if (isCheckIn) {
+                    return `
+                <div class="doc">
+                    <label>
+                        <input type="checkbox" checked>
+                        ${item}
+                    </label>
+                    <button
+                        class="btn sm"
+                        onclick="previewDocument('${item}')"
+                    >
+                        Preview
+                    </button>
+                </div>
+            `;
+                }
+
+                return `
+            <label class="check-row">
+                <input type="checkbox" checked>
+                ${item}
+            </label>
+        `;
+            }).join('');
+
+            openDrawer(
+                title,
+                `
+        <div class="status-flow">
+            ${stepHtml}
+        </div>
+
+        <div class="doc">
+            <b>Guest</b>
+            <span>Rahul Sharma</span>
+        </div>
+
+        <div class="doc">
+            <b>Booking</b>
+            <span>BK-1042</span>
+        </div>
+
+        <div class="section-title">
+            ${isCheckIn ? 'Required Documents' : 'Checkout Checklist'}
+        </div>
+
+        ${checklistHtml}
+
+        <br>
+
+        <button
+            class="btn primary"
+            onclick="completeStayFlow('${mode}')"
+        >
+            ${isCheckIn ? 'Complete Check-in' : 'Complete Check-out'}
+        </button>
+        `
+            );
+        }
+
+        function previewDocument(documentName) {
+            openDrawer(
+                'Document Preview',
+                `
+        <div class="card">
+            <div class="document-preview">
+                <div class="document-preview-icon">📄</div>
+                <h3>${documentName}</h3>
+                <p class="muted">Dummy document preview</p>
+                <div class="document-lines">
+                    <span></span><span></span><span></span><span></span>
+                </div>
+            </div>
+
+            <br>
+
+            <button
+                class="btn primary"
+                onclick="toast('Document downloaded')"
+            >
+                Download Document
+            </button>
+        </div>
+        `
+            );
+        }
+
+        function completeStayFlow(mode) {
+            if (mode === 'in') {
+                toast('Check-in completed • key issued • housekeeping notified');
+            } else {
+                toast('Check-out completed • invoice generated • room sent to housekeeping');
+            }
+
+            closeDrawer();
+        }
+
+
+        function kpiCard(label, value, meta, iconName, accent) {
+            return `
+    <div class="card kpi-card">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+            <div class="kpi-icon">${icon(iconName, 18)}</div>
+            <span class="kpi-trend">${meta.split(' ')[0] === '+' ? meta.split(' ').slice(0, 2).join(' ') : ''}</span>
+        </div>
+        <div class="kpi-label" style="margin-top:12px">${label}</div>
+        <div class="kpi-value">${value}</div>
+        <div class="kpi-meta">${meta}</div>
+    </div>`;
+        }
+
+        function render(page) {
+            let c = document.getElementById('content');
+            const head = (title, sub, action = '') => `<div class="page-head"><div class="page-title-row"><button class="back-btn" onclick="backPage()">←</button><div><h1>${title}</h1><div class="muted">${sub}</div></div></div>${action}</div>`;
+            if (page === 'dashboard') c.innerHTML = `
+<div class="dashboard-head">
+    <div class="dashboard-title">
+        <div class="eyebrow">LORE RESORTS • SATURDAY, 19 SEPTEMBER 2026</div>
+        <h1>Resort Dashboard</h1>
+        <div class="muted">Live operational overview across sales, rooms, guests, revenue and service.</div>
+    </div>
+    <div class="dashboard-actions">
+        <button class="btn primary" onclick="openModal('lead')">${icon('add', 16)} Lead</button>
+        <button class="btn" onclick="openModal('booking')">${icon('add', 16)} Booking</button>
+        <button class="btn" onclick="openModal('quotation')">${icon('quote', 16)} Quotation</button>
+        <button class="btn" onclick="checkinFlow('in')">${icon('stay', 16)} Check-in</button>
+        <button class="btn" onclick="openModal('event')">${icon('event', 16)} Event</button>
+        <button class="btn" onclick="openModal('request')">${icon('inventory', 16)} Requirement</button>
+    </div>
+</div>
+
+<div class="dashboard-datebar">
+    <div><b>Hyderabad property</b><span> • All systems synced</span></div>
+    <div class="flow"><span class="status-dot green-dot"></span> Operations live <button class="btn sm" onclick="notifications()">${icon('alert', 14)} View alerts</button></div>
+</div>
+
+<div class="grid dashboard-kpi-grid">
+    ${kpiCard('Occupancy', '78%', '+4.2% vs last week', 'dashboard', 'green')}
+    ${kpiCard('ADR', '₹9,420', '+6.8% vs last month', 'card', 'blue')}
+    ${kpiCard('RevPAR', '₹7,348', '+5.1% vs last month', 'chart', 'amber')}
+    ${kpiCard('Revenue MTD', '₹18.4L', '82% of monthly target', 'reports', 'green')}
+    ${kpiCard('Arrivals Today', '7', '2 VIP • 1 early arrival', 'arrowIn', 'blue')}
+    ${kpiCard('Departures Today', '4', '1 balance pending', 'arrowOut', 'amber')}
+    ${kpiCard('Open Leads', '128', '18 follow-ups due today', 'leads', 'blue')}
+    ${kpiCard('Receivables', '₹3.84L', '₹84,200 due today', 'payment', 'red')}
+</div>
+
+<div class="grid g2 dashboard-main-grid">
+    <div class="card">
+        <div class="card-head"><div><h3>Revenue & Occupancy Trend</h3><div class="muted">Last 8 operating days</div></div><button class="btn sm" onclick="reportPreview('Revenue')">${icon('reports', 14)} View report</button></div>
+        <div class="chart dashboard-chart">${[42, 65, 50, 82, 73, 95, 68, 88].map(function (x, i) { return `<div class="bar" style="--bar-h:${x}%;height:${x}%"><span>${['M', 'T', 'W', 'T', 'F', 'S', 'S', 'M'][i]}</span></div>`; }).join('')}</div>
+        <div class="chart-legend"><span><i class="legend-box revenue-box"></i> Revenue trend</span><span><i class="legend-box occupancy-box"></i> Occupancy 78%</span></div>
+    </div>
+
+    <div class="card">
+        <div class="card-head"><div><h3>Today's Operations</h3><div class="muted">Items requiring staff attention</div></div><button class="btn sm" onclick="go('stay')">Front desk</button></div>
+        <div class="ops-list">
+            <div class="ops-row"><span class="ops-icon">${icon('arrowIn', 17)}</span><div><b>7 arrivals</b><small>2 VIP • 1 early arrival</small></div><span class="badge bblue">Today</span></div>
+            <div class="ops-row"><span class="ops-icon">${icon('arrowOut', 17)}</span><div><b>4 departures</b><small>1 balance pending</small></div><span class="badge bamber">Today</span></div>
+            <div class="ops-row"><span class="ops-icon">${icon('housekeeping', 17)}</span><div><b>12 housekeeping tasks</b><small>3 high priority</small></div><span class="badge bred">Action</span></div>
+            <div class="ops-row"><span class="ops-icon">${icon('payment', 17)}</span><div><b>5 payment follow-ups</b><small>₹84,200 outstanding today</small></div><span class="badge bamber">Finance</span></div>
+            <div class="ops-row"><span class="ops-icon">${icon('alert', 17)}</span><div><b>3 maintenance requests</b><small>Room 301 is overdue</small></div><span class="badge bred">Urgent</span></div>
+        </div>
+    </div>
+</div>
+
+<div class="grid g3 dashboard-main-grid">
+    <div class="card">
+        <div class="card-head"><div><h3>Lead Funnel</h3><div class="muted">Current sales pipeline</div></div><button class="btn sm" onclick="go('pipeline')">Pipeline</button></div>
+        ${[['New', 48, 100], ['Contacted', 31, 65], ['Qualified', 22, 46], ['Proposal', 14, 29], ['Won', 8, 17]].map(function (x) { return `<div class="funnel-row"><span>${x[0]}</span><b>${x[1]}</b></div><div class="funnel-track"><span style="width:${x[2]}%"></span></div>` }).join('')}
+    </div>
+
+    <div class="card">
+        <div class="card-head"><div><h3>Room Status</h3><div class="muted">Current inventory</div></div><button class="btn sm" onclick="go('rooms')">Rooms</button></div>
+        <div class="room-summary"><div class="room-stat"><b>23</b><small>Ready</small></div><div class="room-stat"><b>8</b><small>Dirty</small></div><div class="room-stat"><b>5</b><small>Cleaning</small></div><div class="room-stat"><b>3</b><small>Maintenance</small></div></div>
+        <div class="section-title">Sellable inventory</div><div class="mini-progress"><span style="width:68%"></span></div><div class="split-label"><span>Available / Ready</span><b>68%</b></div>
+        <div class="muted" style="margin-top:10px">6 rooms arriving today require final inspection.</div>
+    </div>
+
+    <div class="card">
+        <div class="card-head"><div><h3>Upcoming Events</h3><div class="muted">Next 7 days</div></div><button class="btn sm" onclick="go('events')">Events</button></div>
+        <div class="event-mini"><div class="date-chip"><b>27</b><small>SEP</small></div><div><b>Sunday Brunch</b><small>12:00 PM • 120 guests</small></div></div>
+        <div class="event-mini"><div class="date-chip"><b>31</b><small>OCT</small></div><div><b>Diwali Gala Night</b><small>7:00 PM • 150 guests</small></div></div>
+        <button class="btn" style="width:100%;margin-top:8px" onclick="openModal('event')">${icon('add', 14)} Create event</button>
+    </div>
+</div>
+
+<div class="grid g2 dashboard-main-grid">
+    <div class="card"><div class="card-head"><div><h3>Today's Arrivals</h3><div class="muted">Front desk preparation</div></div><button class="btn sm" onclick="go('stay')">View all</button></div>
+    <table class="table compact-table"><tr><th>Guest</th><th>Room</th><th>Arrival</th><th>Status</th></tr>
+    <tr><td><b>Rahul Sharma</b><br><span class="muted">BK-1042</span></td><td>302</td><td>2:00 PM</td><td><span class="badge bblue">Expected</span></td></tr>
+    <tr><td><b>Neha Kapoor</b><br><span class="muted">BK-1043</span></td><td>202</td><td>3:30 PM</td><td><span class="badge bgreen">Ready</span></td></tr>
+    <tr><td><b>Kavita Joshi</b><br><span class="muted">BK-1046</span></td><td>101</td><td>5:00 PM</td><td><span class="badge bamber">Cleaning</span></td></tr></table></div>
+
+    <div class="card"><div class="card-head"><div><h3>Payments Due Today</h3><div class="muted">Prioritize collection before checkout</div></div><button class="btn sm" onclick="go('payments')">Payments</button></div>
+    <table class="table compact-table"><tr><th>Guest</th><th>Booking</th><th>Due</th><th>Action</th></tr>
+    <tr><td>Rahul Sharma</td><td>BK-1042</td><td><b>₹10,120</b></td><td><button class="btn sm" onclick="toast('Payment reminder sent')">Remind</button></td></tr>
+    <tr><td>Neha Kapoor</td><td>BK-1043</td><td><b>₹25,000</b></td><td><button class="btn sm" onclick="toast('Payment link generated')">Collect</button></td></tr>
+    <tr><td>Arjun Mehta</td><td>BK-1044</td><td><b>₹49,080</b></td><td><button class="btn sm" onclick="toast('Invoice opened')">Invoice</button></td></tr></table></div>
+</div>
+
+<div class="grid g3 dashboard-main-grid">
+    <div class="card alert-card"><div class="card-head"><h3>Priority Alerts</h3><button class="btn sm" onclick="notifications()">All alerts</button></div>
+        <p><span class="alert-icon">${icon('alert', 15)}</span><b>Room 301</b> maintenance overdue</p>
+        <p><span class="alert-icon">${icon('payment', 15)}</span><b>4 invoices</b> need payment follow-up</p>
+        <p><span class="alert-icon">${icon('leads', 15)}</span><b>2 leads</b> have no next activity</p>
+        <p><span class="alert-icon">${icon('inventory', 15)}</span><b>REQ-883</b> waiting for approval</p>
+    </div>
+    <div class="card"><div class="card-head"><h3>Channel Performance</h3><button class="btn sm" onclick="go('marketing')">Marketing</button></div>
+        <div class="channel-row"><span>Instagram</span><b>32%</b></div><div class="mini-progress"><span style="width:32%"></span></div>
+        <div class="channel-row"><span>Google Ads</span><b>27%</b></div><div class="mini-progress"><span style="width:27%"></span></div>
+        <div class="channel-row"><span>WhatsApp</span><b>21%</b></div><div class="mini-progress"><span style="width:21%"></span></div>
+        <div class="channel-row"><span>Website</span><b>12%</b></div><div class="mini-progress"><span style="width:12%"></span></div>
+    </div>
+    <div class="card"><div class="card-head"><h3>Guest Experience</h3><button class="btn sm" onclick="go('support')">Feedback</button></div>
+        <div class="guest-score">4.6 <small>/ 5</small></div><div class="muted">Current satisfaction score</div>
+        <div class="mini-progress"><span style="width:92%"></span></div><div class="split-label"><span>Positive feedback</span><b>92%</b></div>
+        <p class="muted">3 open complaints • 1 incident under review</p>
+    </div>
+</div>
+`;
+            else if (page === 'leads') c.innerHTML = head('Leads / Enquiries', 'Capture every enquiry and preserve the complete communication history.', '<button class="btn primary" onclick="openModal(\'lead\')">+ Add Lead</button>') + `<div class="tabs"><button class="tab active" onclick="leadFilter('all',this)">All Leads</button><button class="tab" onclick="go('pipeline')">Pipeline</button><button class="tab" onclick="leadFilter('mine',this)">My Leads</button><button class="tab" onclick="leadFilter('unassigned',this)">Unassigned</button><button class="tab" onclick="leadFilter('followups',this)">Follow-ups Due</button></div><div class="filterbar"><select id="leadSourceFilter" onchange="leadFilter('all')"><option>All Sources</option><option>Instagram</option><option>Google Ads</option><option>WhatsApp</option><option>Website</option><option>Referral</option></select><select id="leadStageFilter" onchange="leadFilter('all')"><option>All Stages</option><option>New</option><option>Qualified</option><option>Proposal</option><option>Negotiation</option><option>Won</option></select><input id="leadSearch" placeholder="Search lead..." oninput="leadFilter('all')"></div><div class="card" id="leadTableWrap"><table class="table"><thead><tr><th>Lead</th><th>Source</th><th>Stage</th><th>Owner</th><th>Score</th><th>Contacts</th><th>Last Contact</th><th>Action</th></tr></thead><tbody>${state.leads.map(l => `<tr><td><b>${l.name}</b><br><span class="muted">${l.phone}</span></td><td>${l.source}</td><td><span class="badge ${l.stage === 'Won' ? 'bgreen' : l.stage === 'New' ? 'bblue' : 'bamber'}">${l.stage}</span></td><td>${l.owner}</td><td>${l.score}</td><td>${l.touches} times</td><td>${l.last}</td><td><button class="btn sm" onclick='openModal("leadDetails",state.leads.find(x=>x.id===${l.id}))'>View</button></td></tr>`).join('')}</tbody></table></div>`;
+            else if (page === 'pipeline') c.innerHTML = head('Lead Pipeline / Kanban', 'Drag-style sales workflow: New → Contacted → Qualified → Proposal → Negotiation → Won/Lost', '<button class="btn primary" onclick="openModal(\'lead\')">+ Add Lead</button>') + `<div class="kanban">${['New', 'Contacted', 'Qualified', 'Proposal', 'Negotiation'].map(s => `<div class="lane"><h3>${s} <span class="muted">${state.leads.filter(x => x.stage === s).length}</span></h3>${state.leads.filter(x => x.stage === s).map(l => `<div class="leadcard"><b>${l.name}</b><small>${l.source} • ${l.owner}</small><small>Contacts: ${l.touches} • Score ${l.score}</small><br><button class="btn sm" onclick='openModal("leadDetails",state.leads.find(x=>x.id===${l.id}))'>Open</button></div>`).join('') || '<div class="empty">No leads</div>'}</div>`).join('')} </div>`;
+            else if (page === 'quotations') c.innerHTML = head('Quotation Management', 'Build, revise, approve, send and track quotations.', '<button class="btn primary" onclick="openModal(\'quotation\')">+ New Quotation</button>') + `<div class="card"><table class="table"><tr><th>Quotation</th><th>Guest</th><th>Stay</th><th>Amount</th><th>Status</th><th>Version</th><th>Actions</th></tr>${[['Q-204', 'Rahul Sharma', '20–22 Sep', '₹40,120', 'Sent', 'v2'], ['Q-203', 'Neha Kapoor', '20–22 Sep', '₹62,500', 'Viewed', 'v1'], ['Q-202', 'Arjun Mehta', '25–27 Sep', '₹29,800', 'Accepted', 'v3']].map(x => `<tr>${x.slice(0, 6).map((v, i) => `<td>${i === 4 ? `<span class="badge ${v === 'Accepted' ? 'bgreen' : 'bblue'}">${v}</span>` : v}</td>`).join('')}<td><button class="btn sm" onclick="go('quotationPreview')">Preview</button> <button class="btn sm" onclick="toast('Quotation sent')">Send</button></td></tr>`).join('')}</table></div>`;
+            else if (page === 'quotationPreview') c.innerHTML = head('Quotation Preview', 'Customer-facing quotation with pricing, inclusions and terms', '<button class="btn primary" onclick="toast(\'PDF download prepared\')">Download PDF</button>') + `<div class="card" style="max-width:900px;margin:auto"><div style="display:flex;justify-content:space-between"><div><h1>ROYAL OASIS RESORT</h1><span class="muted">Quotation Q-204 • Version 2</span></div><b>Valid for 7 days</b></div><hr><h2>Stay Proposal for Rahul Sharma</h2><p>20 Sep 2026 → 22 Sep 2026 • 2 Adults + 1 Child</p><table class="table"><tr><th>Item</th><th>Qty</th><th>Rate</th><th>Total</th></tr><tr><td>Villa</td><td>2 nights</td><td>₹18,000</td><td>₹36,000</td></tr><tr><td>Activities & Dinner</td><td>1</td><td>₹6,120</td><td>₹6,120</td></tr><tr><td>Discount</td><td>-</td><td>-₹2,000</td><td>-₹2,000</td></tr><tr><td colspan="3"><b>Grand Total</b></td><td><b>₹40,120</b></td></tr></table><div class="notice">Includes room, breakfast, selected activity, taxes and standard resort services.</div><br><button class="btn success" onclick="toast('Quotation accepted • booking creation started')">Accept & Book</button> <button class="btn" onclick="toast('Revision requested')">Request Revision</button></div>`;
+            else if (page === 'bookings') c.innerHTML = head('Booking Management', 'Reservations, sources, status, amendments and cancellation controls', '<button class="btn primary" onclick="openModal(\'booking\')">+ New Booking</button>') + `<div class="grid g4">${stat('Confirmed', '72', 'green')}${stat('Pending', '8', 'amber')}${stat('Cancelled', '6', 'red')}${stat('Direct', '41', 'blue')}</div><br><div class="card"><table class="table"><tr><th>Booking</th><th>Guest</th><th>Dates</th><th>Room</th><th>Status</th><th>Action</th></tr>${state.bookings.map(x => `<tr><td>${x[0]}</td><td>${x[1]}</td><td>${x[2]} → ${x[3]}</td><td>${x[4]}</td><td><span class="badge ${x[5] === 'Confirmed' ? 'bgreen' : 'bamber'}">${x[5]}</span></td><td><button class="btn sm" onclick="go('bookingDetails')">Details</button></td></tr>`).join('')}</table></div>`;
+            else if (page === 'bookingDetails') c.innerHTML = head('Booking Details', 'Single source of truth for reservation, guest, room, payment and operations', '<button class="btn danger" onclick="toast(\'Cancellation workflow opened\')">Cancel Booking</button>') + `<div class="grid g3"><div class="card"><h3>BK-1042</h3><p><b>Guest:</b> Rahul Sharma</p><p><b>Stay:</b> 18–21 Sep</p><p><b>Room:</b> Villa 302</p><p><b>Source:</b> Direct</p></div><div class="card"><h3>Payment</h3><p>Advance: ₹30,000</p><p>Balance: ₹10,120</p><span class="badge bamber">Balance Due</span></div><div class="card"><h3>Operations</h3><p>Housekeeping: Assigned</p><p>Airport pickup: Confirmed</p><p>Special dinner: Scheduled</p></div></div><br><div class="card"><div class="tabs"><button class="tab active">Overview</button><button class="tab">Guest</button><button class="tab">Payments</button><button class="tab">Activities</button><button class="tab">Documents</button><button class="tab">Audit Trail</button></div><div class="timeline"><div class="event"><b>Booking confirmed</b><small>16 Sep • Confirmation email + WhatsApp sent</small></div><div class="event"><b>Advance payment received</b><small>16 Sep • UTR TXN98322</small></div><div class="event"><b>Room assigned</b><small>17 Sep • Villa 302</small></div></div></div>`;
+            else if (page === 'rooms') c.innerHTML = head('Room Management', 'Room inventory, availability, status, maintenance and assignments', '<button class="btn primary" onclick="openModal(\'room\')">' + icon('add', 14) + ' Add Room</button>') + `<div class="grid g3">${state.rooms.map(r => `<div class="card"><div style="display:flex;justify-content:space-between"><b>Room ${r[0]}</b><span class="badge ${r[2] === 'Available' ? 'bgreen' : r[2] === 'Occupied' ? 'bblue' : r[2] === 'Maintenance' ? 'bred' : 'bamber'}">${r[2]}</span></div><p>${r[1]}</p><p class="muted">Floor ${r[0][0]} • 2 Guests • Garden View</p><button class="btn sm" onclick="toast('Room ${r[0]} status updated')">Update Status</button> <button class="btn sm" onclick="toast('Room calendar opened')">Calendar</button></div>`).join('')}</div>`;
+            else if (page === 'guests') c.innerHTML = head('Guest / Customer Profiles', '360° customer profile, stay history, preferences, feedback and loyalty', '<button class="btn primary" onclick="openModal(\'guest\')">+ Add Guest</button>') + `<div class="card"><table class="table"><tr><th>Guest</th><th>Contact</th><th>Stays</th><th>Lifetime Value</th><th>Preferences</th><th>Action</th></tr>${[['Rahul Sharma', '+91 98765 43210', '4', '₹1.82L', 'Villa • Jain Food', 'GST-1042'], ['Neha Kapoor', '+91 99887 22110', '2', '₹92K', 'Suite • Spa', 'GST-1043'], ['Arjun Mehta', '+91 99111 22334', '7', '₹3.10L', 'Villa • Adventure', 'GST-1044']].map(x => `<tr><td><b>${x[0]}</b><br><span class="muted">${x[5]}</span></td><td>${x[1]}</td><td>${x[2]}</td><td>${x[3]}</td><td>${x[4]}</td><td><button class="btn sm" onclick="toast('Customer 360 opened')">Profile</button></td></tr>`).join('')}</table></div>`;
+            else if (page === 'payments') c.innerHTML = head('Payment Management', 'Invoices, advances, balances, refunds, gateways and reconciliation', '<button class="btn primary" onclick="openModal(\'payment\')">+ Record Payment</button>') + `<div class="grid g4">${stat('Collected', '₹18.4L', 'green')}${stat('Receivable', '₹3.84L', 'amber')}${stat('Refunds', '₹42K', 'red')}${stat('Online', '71%', 'blue')}</div><br><div class="card"><table class="table"><tr><th>Txn</th><th>Booking</th><th>Guest</th><th>Amount</th><th>Method</th><th>Status</th><th>Action</th></tr>${[['TXN98322', 'BK-1042', 'Rahul Sharma', '₹30,000', 'UPI', 'Success'], ['TXN98323', 'BK-1043', 'Neha Kapoor', '₹25,000', 'Card', 'Success'], ['TXN98324', 'BK-1044', 'Arjun Mehta', '₹10,000', 'Cash', 'Pending']].map(x => `<tr><td><b>${x[0]}</b></td><td>${x[1]}</td><td>${x[2]}</td><td><b>${x[3]}</b></td><td>${x[4]}</td><td><span class="badge ${x[5] === 'Success' ? 'bgreen' : 'bamber'}">${x[5]}</span></td><td><button class="btn sm" onclick="toast('Receipt generated')">Receipt</button></td></tr>`).join('')}</table></div>`;
+            else if (page === 'stay') c.innerHTML = head('Check-in / Check-out', 'Front desk workflow, identity verification, room handover and folio', '<button class="btn primary" onclick="toast(\'Walk-in check-in opened\')">Walk-in Check-in</button>') + `<div class="grid g2"><div class="card"><h3>Today's Check-ins</h3>${['BK-1042 • Rahul Sharma • Villa 302', 'BK-1043 • Neha Kapoor • Suite 202', 'BK-1046 • Kavita Joshi • Deluxe 101'].map(x => `<div style="padding:12px 0;border-bottom:1px solid var(--line)">${x}<br><br><button class="btn success sm" onclick="checkinFlow('in')">Check-in</button> <button class="btn sm" onclick="toast('Registration card opened')">Documents</button></div>`).join('')}</div><div class="card"><h3>Today's Check-outs</h3>${['BK-1032 • Mohit Jain • Villa 301', 'BK-1037 • Sara Khan • Suite 201'].map(x => `<div style="padding:12px 0;border-bottom:1px solid var(--line)">${x}<br><br><button class="btn primary sm" onclick="checkinFlow('out')">Check-out</button> <button class="btn sm" onclick="go('housekeeping')">Send Housekeeping</button></div>`).join('')}</div></div>`;
+            else if (page === 'housekeeping') c.innerHTML = head('Housekeeping', 'Room cleaning, inspections, linen, minibar and maintenance handoff', '<button class="btn primary" onclick="toast(\'Task assigned\')">+ Assign Task</button>') + `<div class="grid g4">${stat('Dirty', '8', 'red')}${stat('Cleaning', '5', 'amber')}${stat('Ready', '23', 'green')}${stat('Inspection', '4', 'blue')}</div><br><div class="card"><table class="table"><tr><th>Room</th><th>Task</th><th>Assigned</th><th>Priority</th><th>Checklist</th><th>Action</th></tr>${[['301', 'Deep Cleaning', 'Pooja', 'High'], ['201', 'Checkout Cleaning', 'Ramesh', 'Normal'], ['102', 'Linen Change', 'Anita', 'Normal'], ['302', 'Inspection', 'Manager', 'High']].map(x => `<tr><td>${x[0]}</td><td>${x[1]}</td><td>${x[2]}</td><td><span class="badge ${x[3] === 'High' ? 'bred' : 'bblue'}">${x[3]}</span></td><td>Bed ✓ • Bath ✓ • Minibar □ • Photos □</td><td><button class="btn sm" onclick="toast('Checklist updated')">Update</button></td></tr>`).join('')}</table></div>`;
+            else if (page === 'inventory') c.innerHTML = head('Inventory & Department Requests', 'Employees request purchases, payments, repairs and stock; departments approve and fulfil', '<button class="btn primary" onclick="openModal(\'request\')">+ New Requirement</button>') + `<div class="grid g4">${stat('Open Requests', '17', 'blue')}${stat('Urgent', '3', 'red')}${stat('Pending Approval', '6', 'amber')}${stat('This Month', '₹2.8L', 'green')}</div><br><div class="card"><table class="table"><tr><th>Request</th><th>From</th><th>Department</th><th>Amount</th><th>Status</th><th>Workflow</th></tr>${[['REQ-883', 'Chef', 'Procurement', '₹12,500', 'Pending Approval'], ['REQ-882', 'Housekeeper', 'Maintenance', '₹4,200', 'Assigned'], ['REQ-881', 'PA', 'Finance', '₹30,000', 'Paid'], ['REQ-880', 'Manager', 'IT', '₹18,000', 'In Progress']].map(x => `<tr><td>${x[0]}</td><td>${x[1]}</td><td>${x[2]}</td><td>${x[3]}</td><td><span class="badge bamber">${x[4]}</span></td><td><button class="btn sm" onclick="toast('Approval chain opened')">Open Flow</button></td></tr>`).join('')}</table></div>`;
+            else if (page === 'packages') c.innerHTML = head('Packages & Activities', 'Sell room packages, meals, spa, safari, transfers and custom activities', '<button class="btn primary" onclick="toast(\'Package builder opened\')">+ Create Package</button>') + `<div class="grid g3">${[['Romantic Escape', '₹18,000', 'Villa + Dinner + Decor'], ['Adventure Weekend', '₹12,500', 'Safari + Trek + BBQ'], ['Family Fun', '₹9,900', 'Activities + Kids Meal']].map(x => `<div class="card"><h3>${x[0]}</h3><div class="stat green" style="font-size:23px">${x[1]}</div><p>${x[2]}</p><button class="btn sm" onclick="toast('Package edited')">Edit</button> <button class="btn sm" onclick="toast('Package added to quotation')">Add to Quote</button></div>`).join('')}</div>`;
+            else if (page === 'events') c.innerHTML = head('Events', 'Create resort events and notify selected users/guests through configured channels', '<button class="btn primary" onclick="openModal(\'event\')">+ Create Event</button>') + `<div class="grid g2">${[['Diwali Gala Night', '31 Oct', '150', 'In-house Guests'], ['Corporate Offsite', '12 Oct', '80', 'Corporate Client'], ['Sunday Brunch', '27 Sep', '120', 'All Guests']].map(x => `<div class="card"><div style="display:flex;justify-content:space-between"><h3>${x[0]}</h3><span class="badge bblue">${x[1]}</span></div><p>Capacity: ${x[2]} • Audience: ${x[3]}</p><p>Notifications: WhatsApp ✓ Email ✓ In-app ✓</p><button class="btn sm" onclick="openModal('eventDetails')">Details</button> <button class="btn sm" onclick="toast('Attendee list opened')">Attendees</button> <button class="btn sm" onclick="toast('Event reminder sent')">Send Reminder</button></div>`).join('')}</div>`;
+            else if (page === 'support') c.innerHTML = head('Support & Feedback', 'Internal incidents, client feedback, evidence, service recovery and public review workflow', '<button class="btn primary" onclick="openModal(\'feedback\')">+ Log Feedback / Incident</button>') + `<div class="tabs"><button class="tab active">All</button><button class="tab">Client Feedback</button><button class="tab">Employee Incidents</button><button class="tab">Property Damage</button><button class="tab">Complaints</button></div><div class="card"><table class="table"><tr><th>Case</th><th>Raised By</th><th>Type</th><th>Booking</th><th>Priority</th><th>Evidence</th><th>Status</th><th>Action</th></tr>${[['FB-112', 'Client', 'Review', 'BK-1042', 'Medium', '—', 'Resolved'], ['INC-47', 'Housekeeper', 'Property Damage', 'BK-1040', 'High', '4 images + invoice', 'Under Review'], ['FB-111', 'Client', 'Service Issue', 'BK-1039', 'Low', '—', 'Resolved']].map(x => `<tr>${x.map((v, i) => `<td>${i === 4 ? `<span class="badge ${v === 'High' ? 'bred' : 'bamber'}">${v}</span>` : v}</td>`).join('')}<td><button class="btn sm" onclick="toast('Case details opened')">Open</button></td></tr>`).join('')}</table></div><br><div class="notice">Client feedback can be routed through a review-request workflow after consent/verification. Google Business Profile posting/review collection requires the appropriate Google integration and platform rules.</div>`;
+            else if (page === 'marketing') c.innerHTML = head('Ads & Integrations', 'Connect acquisition, communication, attribution and review channels', '<button class="btn primary" onclick="toast(\'Integration marketplace opened\')">+ Connect Tool</button>') + `<div class="grid g3">${[['Meta Ads', 'Lead forms • campaigns • attribution', 'Connected'], ['Instagram', 'DMs • comments • profile leads', 'Connected'], ['WhatsApp Business', 'Templates • notifications • conversations', 'Connected'], ['Google Ads', 'Leads • campaign attribution', 'Connected'], ['Google Business Profile', 'Review monitoring • review requests', 'Connected'], ['Email / SMTP', 'Transactional + marketing email', 'Connected'], ['SMS Gateway', 'OTP + alerts', 'Not Connected'], ['OTA / Channel Manager', 'Availability + reservations', 'Connected'], ['Payment Gateway', 'UPI • Cards • Netbanking', 'Connected']].map(x => `<div class="card"><h3>${x[0]}</h3><p class="muted">${x[1]}</p><span class="badge ${x[2] === 'Connected' ? 'bgreen' : 'bamber'}">${x[2]}</span><br><br><button class="btn sm" onclick="toast('${x[0]} settings opened')">${x[2] === 'Connected' ? 'Configure' : 'Connect'}</button></div>`).join('')}</div><br><div class="card"><h3>Unified Lead Attribution</h3><div class="flow"><div class="node">Meta / Instagram</div><div class="arrow">→</div><div class="node">Lead Capture</div><div class="arrow">→</div><div class="node">CRM</div><div class="arrow">→</div><div class="node">Sales Owner</div><div class="arrow">→</div><div class="node">Quotation</div><div class="arrow">→</div><div class="node">Booking + Revenue</div></div></div>`;
+            else if (page === 'reports') c.innerHTML = head('Reports & Analytics', 'Sales, occupancy, revenue, marketing, operations, guest satisfaction and finance') + `<div class="grid g4">${stat('Lead Conversion', '18.6%', 'green')}${stat('ADR', '₹9,420', 'blue')}${stat('RevPAR', '₹7,348', 'amber')}${stat('CSAT', '4.6/5', 'green')}</div><br><div class="grid g2"><div class="card"><h3>Sales Funnel</h3><p>Leads 1,240</p><div class="progress"><span style="width:100%"></span></div><p>Qualified 510</p><div class="progress"><span style="width:41%"></span></div><p>Quotations 290</p><div class="progress"><span style="width:23%"></span></div><p>Bookings 231</p><div class="progress"><span style="width:19%"></span></div></div><div class="card"><h3>Operational KPIs</h3><table class="table"><tr><td>Occupancy</td><td><b>78%</b></td></tr><tr><td>Average Length of Stay</td><td><b>2.4 nights</b></td></tr><tr><td>Cancellation Rate</td><td><b>7.2%</b></td></tr><tr><td>Housekeeping SLA</td><td><b>93%</b></td></tr><tr><td>Payment Collection</td><td><b>91%</b></td></tr></table></div></div><br><div class="card"><h3>Reports</h3><button class="btn" onclick="toast('Daily occupancy report generated')">Occupancy</button> <button class="btn" onclick="reportPreview('Revenue')">Revenue</button> <button class="btn" onclick="reportPreview('Sales')">Sales</button> <button class="btn" onclick="reportPreview('Marketing ROI')">Marketing ROI</button> <button class="btn" onclick="toast('Guest feedback report generated')">Guest Satisfaction</button> <button class="btn" onclick="toast('Export prepared')">Export CSV</button></div>`;
+            else if (page === 'users') c.innerHTML = head('Users & Permissions', 'Role-based access control with CRUD + UI-component permissions', '<button class="btn primary" onclick="toast(\'Create user form opened\')">+ Create User</button>') + `<div class="grid g3"><div class="card"><h3>Roles</h3>${['Super Admin', 'Admin', 'Manager / PA', 'Sales', 'Front Desk', 'Chef / Kitchen', 'Housekeeper', 'Maintenance', 'Finance', 'Event Manager', 'Marketing', 'Viewer'].map(r => `<p>' + icon('users',17) + ' ${r} <button class="btn sm" style="float:right" onclick="toast('${r} permissions opened')">Permissions</button></p>`).join('')}</div><div class="card" style="grid-column:span 2"><h3>Permission Matrix — Example: Sales</h3><div class="permission"><div><b>Module / Component</b></div><div><b>Create</b></div><div><b>Read</b></div><div><b>Update</b></div><div><b>Delete</b></div>${['Leads', 'Quotations', 'Bookings', 'Guests', 'Payments', 'Reports', 'Marketing'].map(x => `<div>${x}</div><div><span class="switch on"></span></div><div><span class="switch on"></span></div><div><span class="switch on"></span></div><div><span class="switch"></span></div>`).join('')}</div><p class="muted">Also support field-level visibility, button/action visibility, API permission, export permission and approval thresholds.</p></div></div><br><div class="card"><h3>User Lifecycle</h3><div class="flow"><div class="node">Admin creates account</div><span class="arrow">→</span><div class="node">Assign role</div><span class="arrow">→</span><div class="node">Customize CRUD/UI permissions</div><span class="arrow">→</span><div class="node">Approval</div><span class="arrow">→</span><div class="node">Invite + MFA</div><span class="arrow">→</span><div class="node">Audit every action</div></div></div>`;
+            else if (page === 'settings') c.innerHTML = head('Settings & Audit', 'Property configuration, policies, notifications, taxes, users, security and immutable audit trail') + `<div class="grid g3">${[['Property Setup', 'Rooms, floors, venues, tax registration'], ['Notification Rules', 'WhatsApp, email, SMS, in-app'], ['Booking Policies', 'Cancellation, deposits, check-in/out'], ['Taxes & Pricing', 'GST, fees, discounts, seasonal rates'], ['Security', 'MFA, sessions, IP controls, password policy'], ['Audit Logs', 'Who did what, when, from where'], ['Templates', 'Quotation, invoice, WhatsApp, email'], ['Data & Backup', 'Retention, export, backup schedule'], ['Channel Manager', 'OTAs, inventory sync, rate sync']].map(x => `<div class="card"><h3>${x[0]}</h3><p class="muted">${x[1]}</p><button class="btn sm" onclick="toast('${x[0]} settings opened')">Configure</button></div>`).join('')}</div><br><div class="card"><h3>Recent Audit Activity</h3><table class="table"><tr><th>User</th><th>Action</th><th>Module</th><th>Time</th></tr>${[['Admin', 'Changed permission', 'Users', '12:04'], ['Amit', 'Moved lead to Proposal', 'Leads', '11:56'], ['Finance', 'Recorded payment', 'Payments', '11:43'], ['Housekeeper', 'Completed task', 'Housekeeping', '11:35']].map(x => `<tr>${x.map(v => `<td>${v}</td>`).join('')}</tr>`).join('')}</table></div>`;
+        }
+        function stat(label, value, cls) { return `<div class="card"><span class="muted">${label}</span><div class="stat ${cls}">${value}</div></div>` }
+        document.getElementById('modal').addEventListener('click', e => { if (e.target.id === 'modal') closeModal() });
+
+        /* ---------- Enhanced functional prototype ---------- */
+        const originalRender = render;
+
+        function backButton(target = 'dashboard') {
+            return `<button class="backbtn" title="Back" onclick="go('${target}')">←</button>`;
+        }
+        function enhancedHead(title, sub, target = 'dashboard', action = '') {
+            return `<div class="page-head"><div class="subhead">${backButton(target)}<div><h1>${title}</h1><div class="muted">${sub}</div></div></div>${action}</div>`;
+        }
+        function showTableRows(rows) {
+            return rows.map(r => `<tr>${r.map(v => `<td>${v}</td>`).join('')}</tr>`).join('');
+        }
+
+        function renderEnhanced(page) {
+            originalRender(page);
+            const c = document.getElementById('content');
+
+            /* Add a back button to all requested submodule pages. */
+            const parentMap = {
+                pipeline: 'leads', quotationPreview: 'quotations', bookingDetails: 'bookings',
+                stay: 'bookings', housekeeping: 'dashboard', inventory: 'dashboard',
+                packages: 'dashboard', events: 'dashboard', support: 'dashboard',
+                marketing: 'dashboard', reports: 'dashboard', users: 'settings'
+            };
+
+            if (page === 'leads') {
+                c.innerHTML = enhancedHead('Leads / Enquiries', 'All enquiries with complete sales activity history', 'dashboard', '<button class="btn primary" onclick="openModal(\'lead\')">+ Add Lead</button>') +
+                    `<div class="tabs" id="leadTabs">
+      <button class="tab active" data-tab="all">All Leads</button>
+      <button class="tab" data-tab="mine">My Leads</button>
+      <button class="tab" data-tab="unassigned">Unassigned</button>
+      <button class="tab" data-tab="followups">Follow-ups Due</button>
+      <button class="tab" onclick="go('pipeline')">Pipeline / Kanban</button>
+    </div>
+    <div class="filterbar"><input id="leadSearch" placeholder="Search lead name / phone / source"><select id="leadSourceFilter"><option value="">All Sources</option><option>Instagram</option><option>Google Ads</option><option>WhatsApp</option><option>Website</option><option>Referral</option></select><button class="btn sm" onclick="renderLeadTab('all')">Reset</button></div>
+    <div class="card"><div id="leadTable"></div></div>`;
+                renderLeadTab('all');
+                document.querySelectorAll('#leadTabs button[data-tab]').forEach(b => b.onclick = () => renderLeadTab(b.dataset.tab));
+                document.getElementById('leadSearch').oninput = () => renderLeadTab(document.querySelector('#leadTabs .active')?.dataset.tab || 'all');
+                document.getElementById('leadSourceFilter').onchange = () => renderLeadTab(document.querySelector('#leadTabs .active')?.dataset.tab || 'all');
+                return;
+            }
+
+            if (page === 'pipeline') {
+                c.innerHTML = enhancedHead('Lead Pipeline / Kanban', 'Move leads through the complete sales lifecycle', 'leads', '<button class="btn primary" onclick="openModal(\'lead\')">+ Add Lead</button>') +
+                    `<div class="notice" style="margin-bottom:15px">Click <b>Next Stage</b> on any card to move it forward. Every move is added to the lead audit/activity history.</div>
+    <div class="kanban">${['New', 'Contacted', 'Qualified', 'Proposal', 'Negotiation', 'Won', 'Lost'].map(s => `
+      <div class="lane"><h3>${s} <span class="muted">${state.leads.filter(x => x.stage === s).length}</span></h3>
+      ${state.leads.filter(x => x.stage === s).map(l => `
+      <div class="leadcard"><b>${l.name}</b><small>${l.source} • ${l.owner || 'Unassigned'}</small><small>${l.touches} contacts • score ${l.score}</small><br>
+      <button class="btn sm" onclick='openModal("leadDetails",state.leads.find(x=>x.id===${l.id}))'>Details</button>
+      ${!['Won', 'Lost'].includes(l.stage) ? `<button class="btn sm" onclick="advanceLead(${l.id})">Next Stage →</button>` : ''}
+      </div>`).join('') || '<div class="empty">No leads</div>'}</div>`).join('')}</div>`;
+                return;
+            }
+
+            if (page === 'quotationPreview') {
+                c.innerHTML = enhancedHead('Quotation Preview', 'Customer-facing quotation with complete pricing and actions', 'quotations', '<div><button class="btn" onclick="toast(\'PDF preview generated\')">Print / PDF</button> <button class="btn primary" onclick="toast(\'Quotation sent by WhatsApp + email\')">Send</button></div>') +
+                    `<div class="card" style="max-width:920px;margin:auto">
+      <div style="display:flex;justify-content:space-between"><div><h1>LORE RESORTS</h1><span class="muted">Quotation Q-204 • Version 2</span></div><span class="badge bgreen">Valid</span></div><hr>
+      <h2>Stay Proposal — Rahul Sharma</h2><p>20 Sep 2026 → 22 Sep 2026 • 2 Adults + 1 Child</p>
+      <table class="table"><tr><th>Item</th><th>Qty</th><th>Rate</th><th>Total</th></tr>
+      <tr><td>Villa</td><td>2 nights</td><td>₹18,000</td><td>₹36,000</td></tr>
+      <tr><td>Romantic Dinner + Activity</td><td>1</td><td>₹6,120</td><td>₹6,120</td></tr>
+      <tr><td>Discount</td><td>—</td><td>-₹2,000</td><td>-₹2,000</td></tr>
+      <tr><td colspan="3"><b>Grand Total</b></td><td><b>₹40,120</b></td></tr></table>
+      <div class="notice">50% advance required to confirm. GST included. Cancellation terms and package inclusions are displayed below.</div><br>
+      <button class="btn success" onclick="toast('Quotation accepted • booking draft created')">Accept & Create Booking</button>
+      <button class="btn" onclick="openModal('quotation')">Edit Quotation</button>
+    </div>`;
+                return;
+            }
+
+            if (page === 'bookingDetails') {
+                c.innerHTML = enhancedHead('Booking Details', 'Reservation, guest, documents, payment, activities and complete audit trail', 'bookings', '<button class="btn danger" onclick="toast(\'Cancellation confirmation opened\')">Cancel Booking</button>') +
+                    `<div class="grid g3"><div class="card"><h3>BK-1042</h3><p><b>Guest:</b> Rahul Sharma</p><p><b>Stay:</b> 18–21 Sep</p><p><b>Room:</b> Villa 302</p><p><b>Status:</b> <span class="badge bgreen">Confirmed</span></p></div>
+    <div class="card"><h3>Payment</h3><p>Advance: ₹30,000</p><p>Balance: ₹10,120</p><button class="btn sm" onclick="go('payments')">Open Payments</button></div>
+    <div class="card"><h3>Stay Operations</h3><p>Check-in: 18 Sep • 2 PM</p><p>Check-out: 21 Sep • 11 AM</p><p>Room: Villa 302</p><button class="btn sm" onclick="go('stay')">Front Desk</button></div></div>
+    <br><div class="card"><div class="pillnav" id="bookingTabs">
+      <button class="active" data-pane="overview">Overview</button><button data-pane="guest">Guest</button><button data-pane="payments">Payments</button><button data-pane="activities">Activities</button><button data-pane="documents">Documents</button><button data-pane="audit">Audit Trail</button>
+    </div><div id="bookingPane"></div></div>`;
+                renderBookingPane('overview');
+                document.querySelectorAll('#bookingTabs button').forEach(b => b.onclick = () => { document.querySelectorAll('#bookingTabs button').forEach(x => x.classList.remove('active')); b.classList.add('active'); renderBookingPane(b.dataset.pane) });
+                return;
+            }
+
+            if (page === 'stay') {
+                c.innerHTML = enhancedHead('Check-in / Check-out', 'Front desk workflow from arrival to folio settlement', 'bookings', '<button class="btn primary" onclick="openModal(\'booking\')">+ Walk-in Check-in</button>') +
+                    `<div class="tabs"><button class="tab active" onclick="renderStayTab('checkin')">Check-ins</button><button class="tab" onclick="renderStayTab('checkout')">Check-outs</button><button class="tab" onclick="renderStayTab('documents')">Guest Documents</button><button class="tab" onclick="renderStayTab('folio')">Folio</button></div><div id="stayPane"></div>`;
+                renderStayTab('checkin'); return;
+            }
+
+            if (page === 'housekeeping') {
+                c.innerHTML = enhancedHead('Housekeeping', 'Assign rooms to staff, manage cleaning stages, inspections and maintenance handoff', 'dashboard', '<button class="btn primary" onclick="openModal(\'hkTask\')">+ Assign Housekeeping Task</button>') +
+                    `<div class="grid g4">${stat('To Clean', '8', 'red')}${stat('In Cleaning', '5', 'amber')}${stat('Inspection', '4', 'blue')}${stat('Ready', '23', 'green')}</div><br>
+    <div class="card"><div class="filterbar"><select id="hkFilter" onchange="renderHK()"><option value="">All Tasks</option><option>Housekeeping</option><option>Inspection</option><option>Maintenance</option></select><select id="hkStaff" onchange="renderHK()"><option value="">All Staff</option><option>Pooja</option><option>Ramesh</option><option>Anita</option><option>Manager</option></select></div><div id="hkTable"></div></div>`;
+                renderHK(); return;
+            }
+
+            if (page === 'packages') {
+                c.innerHTML = enhancedHead('Packages & Activities', 'Create sellable packages and activities with pricing, inventory and inclusions', 'dashboard', '<button class="btn primary" onclick="openModal(\'package\')">+ Create Package</button>') +
+                    `<div class="grid g3" id="packageGrid"></div>`;
+                renderPackages(); return;
+            }
+
+            if (page === 'support') {
+                c.innerHTML = enhancedHead('Support & Feedback', 'Client feedback and employee incident management with evidence and resolution workflows', 'dashboard', '<button class="btn primary" onclick="openModal(\'feedback\')">+ New Case</button>') +
+                    `<div class="pillnav" id="supportTabs"><button class="active" data-kind="all">All</button><button data-kind="client">Client Feedback</button><button data-kind="employee">Employee Incidents</button><button data-kind="damage">Property Damage</button><button data-kind="complaint">Complaints</button></div>
+    <div class="card"><div id="supportTable"></div></div>`;
+                renderSupport('all'); document.querySelectorAll('#supportTabs button').forEach(b => b.onclick = () => { document.querySelectorAll('#supportTabs button').forEach(x => x.classList.remove('active')); b.classList.add('active'); renderSupport(b.dataset.kind) }); return;
+            }
+
+            if (page === 'marketing') {
+                c.innerHTML = enhancedHead('Ads & Integrations', 'Connect and test lead, messaging, attribution, review and booking channels', 'dashboard', '<button class="btn primary" onclick="openModal(\'integration\')">+ Connect Tool</button>') +
+                    `<div class="grid g3" id="integrationGrid"></div><br><div class="card"><h3>Connection Health</h3><div id="integrationFlow"></div></div>`;
+                renderIntegrations(); return;
+            }
+
+            if (page === 'reports') {
+                c.innerHTML = enhancedHead('Reports & Analytics', 'Generate, preview, filter and export dummy operational reports', 'dashboard') +
+                    `<div class="grid g3">
+      ${reportCard('Occupancy', '78%', 'Room utilization by date, room type and source', 'occupancy')}
+      ${reportCard('Revenue', '₹18.4L', 'Room, package, activity and other revenue', 'revenue')}
+      ${reportCard('Sales', '18.6%', 'Lead-to-booking conversion and salesperson activity', 'sales')}
+      ${reportCard('Marketing ROI', '3.8x', 'Spend, leads, bookings and revenue by channel', 'roi')}
+      ${reportCard('Guest Satisfaction', '4.6 / 5', 'Feedback, complaints, ratings and service recovery', 'guest')}
+      ${reportCard('Export CSV', 'Download', 'Export selected report data as CSV', 'export')}
+    </div><br><div class="card"><h3>Report Preview</h3><div id="reportPreview"><div class="empty">Select a report above.</div></div></div>`;
+                return;
+            }
+
+            if (page === 'users') {
+                c.innerHTML = enhancedHead('Users & Permissions', 'Create users, assign roles and customize CRUD, UI, field and approval permissions', 'settings', '<button class="btn primary" onclick="openModal(\'user\')">+ Create User</button>') +
+                    `<div class="grid g3"><div class="card"><h3>Current Users</h3><div id="userList"></div></div><div class="card" style="grid-column:span 2"><h3>Selected User Permissions</h3><div id="userPerm"></div></div></div>`;
+                renderUsers(); return;
+            }
+
+            /* Other pages: add back button by replacing their generated header if needed. */
+            if (parentMap[page]) {
+                const first = document.querySelector('#content .page-head');
+                if (first) {
+                    const h = first.querySelector('h1'); const sub = first.querySelector('.muted');
+                    if (h && sub && !first.querySelector('.backbtn')) {
+                        const title = h.textContent, subtitle = sub.textContent;
+                        const right = first.lastElementChild?.outerHTML || '';
+                        first.outerHTML = enhancedHead(title, subtitle, parentMap[page], right);
+                    }
+                }
+            }
+        }
+
+        /* Lead tab workflow */
+        function renderLeadTab(kind) {
+            document.querySelectorAll('#leadTabs .tab').forEach(b => b.classList.toggle('active', b.dataset.tab === kind));
+            let q = (document.getElementById('leadSearch')?.value || '').toLowerCase();
+            let src = document.getElementById('leadSourceFilter')?.value || '';
+            let list = state.leads.filter(l => (!q || `${l.name} ${l.phone} ${l.source}`.toLowerCase().includes(q)) && (!src || l.source === src));
+            if (kind === 'mine') list = list.filter(l => ['Amit', 'Priya'].includes(l.owner));
+            if (kind === 'unassigned') list = list.filter(l => !l.owner || l.owner === 'Unassigned');
+            if (kind === 'followups') list = list.filter(l => l.stage !== 'Won' && l.stage !== 'Lost' && (['New', 'Contacted', 'Qualified', 'Proposal', 'Negotiation'].includes(l.stage)));
+            const box = document.getElementById('leadTable'); if (!box) return;
+            box.innerHTML = `<table class="table"><thead><tr><th>Lead</th><th>Source</th><th>Stage</th><th>Owner</th><th>Contacts</th><th>Last Contact</th><th>Next Follow-up</th><th>Action</th></tr></thead><tbody>
+  ${list.map(l => `<tr><td><b>${l.name}</b><br><span class="muted">${l.phone}</span></td><td>${l.source}</td><td><span class="badge ${l.stage === 'Won' ? 'bgreen' : 'bblue'}">${l.stage}</span></td><td>${l.owner || 'Unassigned'}</td><td>${l.touches}</td><td>${l.last}</td><td>${l.stage === 'Won' ? '—' : 'Tomorrow 11:00 AM'}</td><td><button class="btn sm" onclick='openModal("leadDetails",state.leads.find(x=>x.id===${l.id}))'>Details</button> <button class="btn sm" onclick="logLeadContact(${l.id})">Log Contact</button></td></tr>`).join('') || `<tr><td colspan="8"><div class="empty">No leads found in this view.</div></td></tr>`}</tbody></table>`;
+        }
+        function logLeadContact(id) { let l = state.leads.find(x => x.id === id); if (l) { l.touches++; l.last = 'Just now'; toast(`Contact logged for ${l.name}`); renderLeadTab(document.querySelector('#leadTabs .active')?.dataset.tab || 'all') } }
+        function advanceLead(id) { let l = state.leads.find(x => x.id === id); let stages = ['New', 'Contacted', 'Qualified', 'Proposal', 'Negotiation', 'Won']; let i = stages.indexOf(l.stage); if (i >= 0 && i < stages.length - 1) { l.stage = stages[i + 1]; l.touches++; l.last = 'Just now'; toast(`${l.name} moved to ${l.stage}`); go('pipeline') } }
+
+        /* Booking sub-tabs */
+        function renderBookingPane(pane) {
+            const box = document.getElementById('bookingPane'); if (!box) return;
+            const data = {
+                overview: `<div class="grid g3"><div><b>Guest</b><p>Rahul Sharma<br>+91 98765 43210<br>rahul@example.com</p></div><div><b>Stay</b><p>18 Sep → 21 Sep<br>Villa 302<br>2 adults + 1 child</p></div><div><b>Source</b><p>Direct Website<br>Sales Owner: Amit<br>Confirmation: Sent</p></div></div>`,
+                guest: `<div class="grid g2"><div><h3>Guest Profile</h3><p><b>Name:</b> Rahul Sharma</p><p><b>Nationality:</b> Indian</p><p><b>Phone:</b> +91 98765 43210</p><p><b>Email:</b> rahul@example.com</p></div><div><h3>Preferences</h3><p>Jain food • Garden-facing room • Airport transfer</p><p>Loyalty tier: Gold • Previous stays: 3</p></div></div>`,
+                payments: `<table class="table"><tr><th>Transaction</th><th>Date</th><th>Method</th><th>Amount</th><th>Status</th><th>Receipt</th></tr>${showTableRows([['TXN98322', '16 Sep', 'UPI', '₹30,000', 'Success', '<button class="btn sm" onclick="toast(\'Receipt opened\')">View</button>'], ['TXN98350', '20 Sep', '—', '₹10,120', 'Due', '<button class="btn sm" onclick="toast(\'Payment link created\')">Collect</button>']])}</table>`,
+                activities: `<div class="grid g2"><div class="card"><h3>Included</h3><p>✓ Romantic dinner</p><p>✓ Safari</p><p>✓ Breakfast</p></div><div class="card"><h3>Booked Add-ons</h3><p>Airport pickup — ₹2,500 <button class="btn sm" onclick="toast('Activity cancelled')">Remove</button></p><p>Spa — ₹4,000 <button class="btn sm" onclick="toast('Activity rescheduled')">Reschedule</button></p></div></div>`,
+                documents: `<h3>Guest & Booking Documents</h3>${['Aadhaar — Rahul Sharma.pdf', 'Booking Confirmation — BK-1042.pdf', 'Quotation Q-204.pdf', 'Payment Receipt TXN98322.pdf', 'Guest Registration Card.pdf'].map((d, i) => `<div class="doc"><div><span class="doc-icon">📄</span><b>${d}</b><div class="muted">${i < 2 ? 'Identity / booking document' : 'System-generated document'} • ${i + 1}.2 MB</div></div><div><button class="btn sm" onclick="toast('Previewing ${d}')">Preview</button> <button class="btn sm" onclick="toast('Downloaded ${d}')">Download</button></div></div>`).join('')}`,
+                audit: `<div class="timeline"><div class="event"><b>Amit updated booking</b><small>19 Sep 09:42 • Room changed to Villa 302</small></div><div class="event"><b>Payment received</b><small>16 Sep 14:18 • UPI • ₹30,000</small></div><div class="event"><b>Confirmation sent</b><small>16 Sep 14:20 • WhatsApp + email</small></div><div class="event"><b>Booking created</b><small>16 Sep 13:55 • User: Sales</small></div></div>`
+            };
+            box.innerHTML = data[pane];
+        }
+
+        /* Stay tabs */
+        function renderStayTab(kind) {
+            const box = document.getElementById('stayPane'); if (!box) return;
+            const tabs = [...document.querySelectorAll('#content .tabs .tab')];
+            tabs.forEach((x, i) => x.classList.toggle('active', ['checkin', 'checkout', 'documents', 'folio'][i] === kind));
+            if (kind === 'checkin') box.innerHTML = `<div class="card"><table class="table"><tr><th>Booking</th><th>Guest</th><th>Room</th><th>ID</th><th>Payment</th><th>Action</th></tr>${showTableRows([['BK-1042', 'Rahul Sharma', 'Villa 302', 'Aadhaar ✓', 'Advance paid', '<button class="btn success sm" onclick="toast(\'Check-in completed • room activated\')">Check-in</button>'], ['BK-1043', 'Neha Kapoor', 'Suite 202', 'Passport ✓', 'Advance paid', '<button class="btn success sm" onclick="toast(\'Check-in completed • key issued\')">Check-in</button>'], ['BK-1046', 'Kavita Joshi', 'Deluxe 101', 'Pending', 'Balance due', '<button class="btn sm" onclick="toast(\'Documents/payment verification opened\')">Verify</button>']])}</table></div>`;
+            if (kind === 'checkout') box.innerHTML = `<div class="card"><table class="table"><tr><th>Booking</th><th>Guest</th><th>Room</th><th>Folio</th><th>Room Inspection</th><th>Action</th></tr>${showTableRows([['BK-1032', 'Mohit Jain', 'Villa 301', '₹2,400 due', 'Pending', '<button class="btn primary sm" onclick="toast(\'Final folio settled • checkout completed\');go(\'housekeeping\')">Check-out</button>'], ['BK-1037', 'Sara Khan', 'Suite 201', 'Paid', 'Cleared', '<button class="btn primary sm" onclick="toast(\'Checkout completed • housekeeping notified\');go(\'housekeeping\')">Check-out</button>']])}</table></div>`;
+            if (kind === 'documents') box.innerHTML = `<div class="card"><h3>Dummy Document Vault</h3>${['Rahul Sharma — Aadhaar.pdf', 'Rahul Sharma — Registration Card.pdf', 'BK-1042 — Confirmation.pdf', 'TXN98322 — Receipt.pdf', 'Guest Invoice — Draft.pdf'].map(d => `<div class="doc"><div><span class="doc-icon">📎</span><b>${d}</b><div class="muted">Uploaded / generated • Verified</div></div><button class="btn sm" onclick="toast('Opening document preview')">Preview</button></div>`).join('')}</div>`;
+            if (kind === 'folio') box.innerHTML = `<div class="grid g2"><div class="card"><h3>Guest Folio</h3><table class="table"><tr><td>Room</td><td>₹36,000</td></tr><tr><td>Restaurant</td><td>₹6,800</td></tr><tr><td>Spa</td><td>₹4,000</td></tr><tr><td>Tax</td><td>₹5,920</td></tr><tr><td><b>Total</b></td><td><b>₹52,720</b></td></tr></table></div><div class="card"><h3>Settlement</h3><p>Paid: ₹42,720</p><p>Balance: ₹10,000</p><button class="btn success" onclick="toast('Payment link sent to guest')">Collect Balance</button></div></div>`;
+        }
+
+        /* Housekeeping */
+        let hkTasks = [
+            ['HK-1001', 'Room 301', 'Deep Cleaning', 'Pooja', 'High', 'In Cleaning'],
+            ['HK-1002', 'Room 201', 'Checkout Cleaning', 'Ramesh', 'Normal', 'To Clean'],
+            ['HK-1003', 'Room 102', 'Linen Change', 'Anita', 'Normal', 'Ready'],
+            ['HK-1004', 'Room 302', 'Inspection', 'Manager', 'High', 'Inspection'],
+            ['HK-1005', 'Room 101', 'Minibar Refill', 'Pooja', 'Low', 'To Clean']
+        ];
+        function renderHK() {
+            const f = document.getElementById('hkFilter')?.value || '', s = document.getElementById('hkStaff')?.value || '', box = document.getElementById('hkTable'); if (!box) return;
+            let list = hkTasks.filter(x => (!f || x[2].includes(f) || f === 'Housekeeping' && x[2] !== 'Inspection' && x[2] !== 'Maintenance') && (!s || x[3] === s));
+            box.innerHTML = `<table class="table"><tr><th>Task</th><th>Room</th><th>Task Type</th><th>Assigned To</th><th>Priority</th><th>Status</th><th>Checklist</th><th>Action</th></tr>${list.map((x, i) => `<tr><td>${x[0]}</td><td><b>${x[1]}</b></td><td>${x[2]}</td><td>${x[3]}</td><td><span class="badge ${x[4] === 'High' ? 'bred' : 'bblue'}">${x[4]}</span></td><td><span class="badge bamber">${x[5]}</span></td><td>Bed ✓ Bath ✓ Minibar □ Photos □</td><td><button class="btn sm" onclick="hkAdvance(${i})">Update</button> <button class="btn sm" onclick="toast('Room ${x[1]} opened')">Room</button></td></tr>`).join('')}</table>`;
+        }
+        function hkAdvance(i) { let x = hkTasks[i]; let seq = ['To Clean', 'In Cleaning', 'Inspection', 'Ready']; let j = seq.indexOf(x[5]); x[5] = seq[Math.min(j + 1, seq.length - 1)]; toast(`${x[0]} → ${x[5]}`); renderHK() }
+
+        /* Packages */
+        let packages = [
+            ['Romantic Escape', '₹18,000', 'Villa + Dinner + Decor', 'Active'],
+            ['Adventure Weekend', '₹12,500', 'Safari + Trek + BBQ', 'Active'],
+            ['Family Fun', '₹9,900', 'Activities + Kids Meal', 'Active']
+        ];
+        function renderPackages() { const g = document.getElementById('packageGrid'); if (!g) return; g.innerHTML = packages.map((x, i) => `<div class="card"><span class="badge bgreen">${x[3]}</span><h3>${x[0]}</h3><div class="stat green" style="font-size:23px">${x[1]}</div><p>${x[2]}</p><p class="muted">Room allocation • tax • inventory • activity slots</p><button class="btn sm" onclick="openModal('package',${i})">Edit</button> <button class="btn sm" onclick="toast('Package added to quotation builder')">Add to Quote</button></div>`).join('') }
+
+        /* Support */
+        let cases = [
+            ['FB-112', 'client', 'Client Feedback', 'BK-1042', 'Medium', 'No', 'Resolved'],
+            ['INC-47', 'employee', 'Property Damage', 'BK-1040', 'High', '4 images + invoice', 'Under Review'],
+            ['FB-111', 'client', 'Complaints', 'BK-1039', 'Low', 'No', 'Resolved'],
+            ['INC-46', 'employee', 'Employee Incident', 'BK-1038', 'Medium', '2 images', 'Assigned']
+        ];
+        function renderSupport(kind) { const box = document.getElementById('supportTable'); if (!box) return; let list = cases.filter(x => kind === 'all' || x[1] === kind || kind === 'damage' && x[2] === 'Property Damage' || kind === 'complaint' && x[2] === 'Complaints' || kind === 'employee' && x[1] === 'employee' || kind === 'client' && x[1] === 'client'); box.innerHTML = `<table class="table"><tr><th>Case</th><th>Raised By</th><th>Type</th><th>Booking</th><th>Priority</th><th>Evidence</th><th>Status</th><th>Action</th></tr>${list.map((x, i) => `<tr><td>${x[0]}</td><td>${x[1]}</td><td>${x[2]}</td><td>${x[3]}</td><td><span class="badge ${x[4] === 'High' ? 'bred' : 'bamber'}">${x[4]}</span></td><td>${x[5]}</td><td>${x[6]}</td><td><button class="btn sm" onclick="openSupportCase(${i})">Open</button></td></tr>`).join('')}</table>` }
+        function openSupportCase(i) { let x = cases[i]; toast(`${x[0]} opened • evidence, timeline and resolution workflow available`) }
+
+        /* Integrations */
+        const integrations = [
+            ['Meta Ads', 'Lead Forms + campaign attribution', 'Connected'], ['Instagram', 'DMs + profile leads', 'Connected'], ['WhatsApp Business', 'Messages + templates + alerts', 'Connected'], ['Google Ads', 'Lead tracking + conversion', 'Connected'], ['Google Business Profile', 'Reviews + review requests', 'Connected'], ['Email / SMTP', 'Transactional email', 'Connected'], ['SMS Gateway', 'OTP + alerts', 'Not Connected'], ['OTA / Channel Manager', 'Reservation + inventory sync', 'Connected'], ['Payment Gateway', 'UPI + Cards + Netbanking', 'Connected']
+        ];
+        function renderIntegrations() { const g = document.getElementById('integrationGrid'); if (!g) return; g.innerHTML = integrations.map((x, i) => `<div class="card"><h3>${x[0]}</h3><p class="muted">${x[1]}</p><span class="badge ${x[2] === 'Connected' ? 'bgreen' : 'bamber'}" id="int-${i}">${x[2]}</span><br><br><button class="btn sm" onclick="toggleIntegration(${i})">${x[2] === 'Connected' ? 'Test / Configure' : 'Connect'}</button></div>`).join(''); document.getElementById('integrationFlow').innerHTML = `<div class="flow">${integrations.slice(0, 7).map((x, i) => `<div class="node">${x[0]} ✓</div>${i < 6 ? '<span class="arrow">→</span>' : ''}`).join('')}</div>` }
+        function toggleIntegration(i) { integrations[i][2] = 'Connected'; toast(`${integrations[i][0]} connected and test webhook passed`); renderIntegrations() }
+
+        /* Reports */
+        function reportCard(title, value, desc, key) { return `<div class="card report-card" onclick="previewReport('${key}')"><span class="muted">${title}</span><div class="stat blue">${value}</div><p>${desc}</p><button class="btn sm">Preview Report →</button></div>` }
+        function previewReport(key) {
+            const box = document.getElementById('reportPreview'); if (!box) return;
+            if (key === 'export') { exportCSV(); return }
+            const data = {
+                occupancy: ['Occupancy Report', [['Date', 'Occupancy', 'Rooms Sold', 'Available'], ['18 Sep', '78%', '78', '100'], ['19 Sep', '82%', '82', '100'], ['20 Sep', '86%', '86', '100'], ['21 Sep', '74%', '74', '100']]],
+                revenue: ['Revenue Report', [['Category', 'Revenue', 'Share'], ['Rooms', '₹12.8L', '70%'], ['Food & Beverage', '₹3.2L', '17%'], ['Activities', '₹1.5L', '8%'], ['Other', '₹0.9L', '5%']]],
+                sales: ['Sales Report', [['Salesperson', 'Leads', 'Contacts', 'Quotes', 'Bookings', 'Conversion'], ['Amit', '42', '118', '21', '9', '21.4%'], ['Priya', '38', '102', '19', '8', '21.1%'], ['Ravi', '31', '77', '14', '5', '16.1%']]],
+                roi: ['Marketing ROI Report', [['Channel', 'Spend', 'Leads', 'Bookings', 'Revenue', 'ROI'], ['Meta', '₹80K', '240', '32', '₹3.4L', '4.25x'], ['Google', '₹1.1L', '310', '41', '₹4.8L', '4.36x'], ['Instagram', '₹45K', '180', '19', '₹2.1L', '4.67x'], ['WhatsApp', '₹18K', '150', '22', '₹2.8L', '15.56x']]],
+                guest: ['Guest Satisfaction Report', [['Metric', 'Score', 'Cases', 'Resolved'], ['Overall Rating', '4.6/5', '112', '108'], ['Cleanliness', '4.7/5', '21', '21'], ['Service', '4.5/5', '34', '33'], ['Food', '4.4/5', '18', '17']]]
+            };
+            let d = data[key]; box.innerHTML = `<div class="notice">Dummy report preview • generated ${new Date().toLocaleString()}</div><br><table class="table"><tr>${d[1][0].map(x => `<th>${x}</th>`).join('')}</tr>${d[1].slice(1).map(r => `<tr>${r.map(x => `<td>${x}</td>`).join('')}</tr>`).join('')}</table><br><button class="btn primary" onclick="exportCSV('${key}')">Export CSV</button> <button class="btn" onclick="toast('PDF report generated')">Export PDF</button>`
+        }
+        function exportCSV(key = 'report') { let csv = 'Metric,Value\\nReport,' + key + '\\nGenerated,' + new Date().toLocaleString() + '\\n'; let blob = new Blob([csv], { type: 'text/csv' }), a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = `lore-${key}-report.csv`; a.click(); URL.revokeObjectURL(a.href); toast('CSV downloaded') }
+
+        /* Users */
+        const users = [
+            ['Bhairav Admin', 'admin@lore.example', 'Admin', 'Active'],
+            ['Amit Sales', 'amit@lore.example', 'Sales', 'Active'],
+            ['Pooja Housekeeping', 'pooja@lore.example', 'Housekeeper', 'Active'],
+            ['Ramesh Kitchen', 'ramesh@lore.example', 'Chef / Kitchen', 'Active'],
+            ['Priya Front Desk', 'priya@lore.example', 'Front Desk', 'Active']
+        ];
+        function renderUsers() { const l = document.getElementById('userList'), p = document.getElementById('userPerm'); if (!l) return; l.innerHTML = users.map((u, i) => `<div style="padding:10px 0;border-bottom:1px solid var(--line)"><b>${u[0]}</b><div class="muted">${u[1]} • ${u[2]}</div><span class="badge bgreen">${u[3]}</span> <button class="btn sm" onclick="selectUser(${i})">Permissions</button></div>`).join(''); selectUser(0) }
+        function selectUser(i) { let u = users[i], p = document.getElementById('userPerm'); if (!p) return; p.innerHTML = `<p><b>${u[0]}</b> — ${u[2]}</p><div class="permission"><div><b>Component</b></div><div><b>Create</b></div><div><b>Read</b></div><div><b>Update</b></div><div><b>Delete</b></div>${['Leads', 'Bookings', 'Guests', 'Payments', 'Housekeeping', 'Packages', 'Events', 'Reports', 'Settings'].map(x => `<div>${x}</div><div><span class="switch ${x === 'Reports' ? '' : 'on'}"></span></div><div><span class="switch on"></span></div><div><span class="switch on"></span></div><div><span class="switch"></span></div>`).join('')}</div><br><div class="notice">Additional controls: field-level visibility, export, approval limits, API access, button visibility, MFA requirement and login/session policy.</div>` }
+
+        /* Extra modals */
+        const oldOpenModal = openModal;
+        openModal = function (type, data = {}) {
+            if (type === 'hkTask') {
+                showCustomModal('Assign Housekeeping Task', `
+ <div class="formgrid">${field('Room', 'hkRoom', '301', ['101', '102', '201', '202', '301', '302'])}${field('Task Type', 'hkType', 'Deep Cleaning', ['Checkout Cleaning', 'Deep Cleaning', 'Linen Change', 'Minibar Refill', 'Inspection', 'Maintenance Handoff'])}
+ ${field('Assign Staff', 'hkAssign', 'Pooja', ['Pooja', 'Ramesh', 'Anita', 'Manager'])}${field('Priority', 'hkPriority', 'Normal', ['Low', 'Normal', 'High', 'Urgent'])}
+ ${field('Due Time', 'hkDue', '14:00')}${field('Status', 'hkStatus', 'To Clean', ['To Clean', 'In Cleaning', 'Inspection', 'Ready'])}
+ <div class="field full"><label>Checklist</label><div class="checklist"><label><input type="checkbox" checked> Bed & linen</label><label><input type="checkbox" checked> Bathroom</label><label><input type="checkbox"> Minibar</label><label><input type="checkbox"> Photos</label><label><input type="checkbox"> Maintenance issue check</label></div></div></div>
+ <button class="btn primary" onclick="addHKTask()">Assign Task</button>`); return
+            }
+            if (type === 'package') {
+                showCustomModal(data !== undefined ? 'Create / Edit Package' : 'Create Package', `
+ <div class="formgrid">${field('Package Name', 'pName', 'Romantic Escape')}${field('Package Type', 'pType', 'Stay Package', ['Stay Package', 'Activity', 'Dining', 'Spa', 'Transfer', 'Event'])}
+ ${field('Base Price', 'pPrice', '18000')}${field('Tax', 'pTax', '18%')}
+ ${field('Room Type', 'pRoom', 'Villa', ['Villa', 'Premium Suite', 'Deluxe Garden', 'None'])}${field('Capacity', 'pCap', '2')}
+ <div class="field full"><label>Inclusions</label><textarea id="pInc">Breakfast, Romantic Dinner, Room Decor, Activity</textarea></div>
+ <div class="field full"><label>Inventory / Scheduling Rules</label><textarea>Activity slots: 10/day. Minimum stay: 2 nights. Blackout dates configurable.</textarea></div></div>
+ <button class="btn primary" onclick="savePackage()">Save Package</button>`); return
+            }
+            if (type === 'integration') {
+                showCustomModal('Connect Integration', `
+ <div class="formgrid">${field('Tool', 'iTool', 'Meta Ads', ['Meta Ads', 'Instagram', 'WhatsApp Business', 'Google Ads', 'Google Business Profile', 'Email / SMTP', 'SMS Gateway', 'OTA / Channel Manager', 'Payment Gateway'])}${field('Environment', 'iEnv', 'Production', ['Sandbox', 'Production'])}
+ ${field('Account / Property ID', 'iAccount', 'LORE-RESORT-001')}${field('Webhook URL', 'iWebhook', 'https://example.com/webhooks/resort')}</div>
+ <div class="notice">Credentials should be stored encrypted in the backend. This prototype simulates the connection/test flow.</div><br><button class="btn primary" onclick="toast('Connection test successful');closeModal();go('marketing')">Connect & Test</button>`); return
+            }
+            if (type === 'user') {
+                showCustomModal('Create User', `
+ <div class="formgrid">${field('Full Name', 'uName', 'New Employee')}${field('Email', 'uEmail', 'employee@lore.example')}${field('Mobile', 'uMobile', '+91')}${field('Role', 'uRole', 'Front Desk', ['Admin', 'Manager / PA', 'Sales', 'Front Desk', 'Chef / Kitchen', 'Housekeeper', 'Maintenance', 'Finance', 'Event Manager', 'Marketing', 'Viewer'])}
+ ${field('Department', 'uDept', 'Front Office', ['Front Office', 'Sales', 'Kitchen', 'Housekeeping', 'Maintenance', 'Finance', 'HR', 'IT', 'Management'])}${field('Employee ID', 'uId', 'EMP-1006')}
+ <div class="field full"><label>Access</label><div class="checklist"><label><input type="checkbox" checked> Email invitation</label><label><input type="checkbox" checked> MFA required</label><label><input type="checkbox"> Restrict export</label></div></div></div>
+ <button class="btn primary" onclick="saveUser()">Create User & Assign Permissions</button>`); return
+            }
+            oldOpenModal(type, data);
+        }
+        function showCustomModal(title, body) { document.getElementById('modal').classList.add('show'); document.getElementById('modalbox').innerHTML = `<div class="modalhead"><h2>${title}</h2><button class="close" onclick="closeModal()">✕</button></div>${body}` }
+        function addHKTask() { hkTasks.push(['HK-' + (1006 + hkTasks.length), document.getElementById('hkRoom').value, document.getElementById('hkType').value, document.getElementById('hkAssign').value, document.getElementById('hkPriority').value, document.getElementById('hkStatus').value]); closeModal(); toast('Housekeeping task assigned'); go('housekeeping') }
+        function savePackage() { packages.push([document.getElementById('pName').value, `₹${document.getElementById('pPrice').value}`, document.getElementById('pInc').value, 'Active']); closeModal(); toast('Package created successfully'); go('packages') }
+        function saveUser() { users.push([document.getElementById('uName').value, document.getElementById('uEmail').value, document.getElementById('uRole').value, 'Active']); closeModal(); toast('User created and invitation sent'); go('users') }
+
+        /* Replace renderer with enhanced renderer. */
+        render = renderEnhanced;
+        initIcons();
+        go('dashboard');
+
+    </script>
+</body>
+
+</html>
