@@ -1756,11 +1756,1132 @@
             font-weight: 700
         }
     </style>
+
+    <style>
+        /* Mobile-only responsive layer.
+           Desktop/tablet layouts above remain unchanged. */
+        .mobile-menu-btn,
+        .mobile-sidebar-backdrop,
+        .mobile-sidebar-close {
+            display: none;
+        }
+
+        @media (max-width: 700px) {
+
+            html,
+            body {
+                width: 100%;
+                max-width: 100%;
+                overflow-x: hidden;
+            }
+
+            .app {
+                min-height: 100dvh;
+            }
+
+            /* Turn the desktop sidebar into a proper mobile navigation drawer. */
+            .sidebar {
+                width: 260px;
+                left: 0;
+                right: auto;
+                transform: translateX(-105%);
+                transition: transform .25s ease;
+                z-index: 100;
+                box-shadow: 8px 0 30px rgba(23, 53, 45, .18);
+                padding: 18px 12px;
+            }
+
+            .sidebar.mobile-open {
+                transform: translateX(0);
+            }
+
+            .brand {
+                font-size: 23px;
+            }
+
+            .brand:before {
+                content: none;
+            }
+
+            .nav button span {
+                display: inline;
+            }
+
+            .nav .icon {
+                margin-right: 9px;
+            }
+
+            .mobile-sidebar-backdrop {
+                position: fixed;
+                inset: 0;
+                background: rgba(7, 20, 37, .42);
+                z-index: 95;
+            }
+
+            .mobile-sidebar-backdrop.show {
+                display: block;
+            }
+
+            .main {
+                width: 100%;
+                min-width: 0;
+                margin-left: 0;
+            }
+
+            .top {
+                height: 60px;
+                padding: 8px 10px;
+                gap: 7px;
+                position: sticky;
+                z-index: 90;
+            }
+
+            .mobile-menu-btn {
+                display: inline-flex;
+                flex: 0 0 38px;
+                width: 38px;
+                height: 38px;
+                align-items: center;
+                justify-content: center;
+                border: 1px solid var(--line);
+                border-radius: 9px;
+                background: #fffdf8;
+                color: var(--nav);
+                font-size: 21px;
+                line-height: 1;
+            }
+
+            .search {
+                flex: 1 1 auto;
+                min-width: 0;
+                width: auto;
+                height: 38px;
+                padding: 8px 10px;
+                font-size: 13px;
+            }
+
+            .top-right {
+                flex: 0 0 auto;
+                gap: 5px;
+            }
+
+            .top-right .btn.sm {
+                padding: 8px 9px;
+                min-height: 38px;
+                font-size: 12px;
+            }
+
+            .avatar {
+                width: 36px;
+                height: 36px;
+                flex: 0 0 36px;
+            }
+
+            .content {
+                width: 100%;
+                min-width: 0;
+                padding: 14px 12px 30px;
+                overflow: visible;
+            }
+
+            .page-head,
+            .dashboard-head {
+                width: 100%;
+                gap: 12px;
+                margin-bottom: 15px;
+                align-items: flex-start;
+            }
+
+            .page-head {
+                flex-wrap: wrap;
+            }
+
+            .page-title-row {
+                min-width: 0;
+                flex: 1 1 100%;
+            }
+
+            .page-title-row>div {
+                min-width: 0;
+            }
+
+            .page-head h1,
+            .dashboard-title h1 {
+                font-size: 24px;
+                line-height: 1.15;
+            }
+
+            .page-head .muted,
+            .dashboard-title .muted {
+                line-height: 1.45;
+            }
+
+            .page-head>.btn,
+            .page-head>button {
+                width: 100%;
+                min-height: 42px;
+            }
+
+            .dashboard-actions {
+                width: 100%;
+                display: grid;
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+                gap: 7px;
+            }
+
+            .dashboard-actions .btn {
+                width: 100%;
+                min-width: 0;
+                white-space: normal;
+            }
+
+            .grid.g4,
+            .grid.g3,
+            .grid.g2,
+            .dashboard-main-grid,
+            .dashboard-kpi-grid,
+            .report-summary,
+            .formgrid {
+                grid-template-columns: 1fr !important;
+            }
+
+            .card {
+                width: 100%;
+                min-width: 0;
+                padding: 14px;
+                overflow-x: auto;
+            }
+
+            .card-head {
+                gap: 9px;
+                flex-wrap: wrap;
+            }
+
+            .card-head>* {
+                max-width: 100%;
+            }
+
+            .formgrid {
+                gap: 0;
+            }
+
+            .field {
+                min-width: 0;
+            }
+
+            .field input,
+            .field select,
+            .field textarea {
+                min-width: 0;
+                font-size: 14px;
+            }
+
+            .tabs,
+            .pillnav {
+                width: 100%;
+                overflow-x: auto;
+                flex-wrap: nowrap;
+                scrollbar-width: thin;
+                padding-bottom: 2px;
+            }
+
+            .tabs .tab,
+            .pillnav button {
+                flex: 0 0 auto;
+                white-space: nowrap;
+            }
+
+            .filterbar {
+                display: grid;
+                grid-template-columns: 1fr;
+                gap: 8px;
+            }
+
+            .filterbar input,
+            .filterbar select {
+                width: 100%;
+                min-width: 0;
+            }
+
+            /* Keep data tables usable without squeezing columns into unreadable text. */
+            .table,
+            .report-table {
+                min-width: 680px;
+            }
+
+            .compact-table {
+                min-width: 560px;
+            }
+
+            .kanban {
+                display: flex;
+                grid-template-columns: none;
+                gap: 10px;
+                overflow-x: auto;
+                padding-bottom: 8px;
+                scroll-snap-type: x proximity;
+            }
+
+            .lane {
+                flex: 0 0 275px;
+                width: 275px;
+                min-height: 380px;
+                scroll-snap-align: start;
+            }
+
+            .room-summary {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
+            .quick-grid {
+                grid-template-columns: 1fr !important;
+            }
+
+            .quick-card {
+                width: 100%;
+            }
+
+            .permission {
+                min-width: 620px;
+            }
+
+            .flow {
+                align-items: stretch;
+            }
+
+            .node {
+                max-width: 100%;
+            }
+
+            .report-hero {
+                align-items: flex-start;
+                gap: 12px;
+            }
+
+            .report-modal,
+            .modalbox {
+                width: 100% !important;
+                max-width: 100%;
+                max-height: 94dvh !important;
+                padding: 16px;
+                border-radius: 13px;
+            }
+
+            .modal {
+                padding: 7px;
+                align-items: flex-end;
+            }
+
+            .modalhead h2 {
+                font-size: 21px;
+                line-height: 1.2;
+            }
+
+            .close {
+                flex: 0 0 36px;
+            }
+
+            .report-body {
+                max-height: 70dvh;
+                overflow: auto;
+            }
+
+            .drawer {
+                width: min(100%, 430px);
+                padding: 16px;
+            }
+
+            .toast {
+                left: 12px;
+                right: 12px;
+                bottom: 14px;
+                text-align: center;
+            }
+
+            .document-preview {
+                min-height: 240px;
+                padding: 18px;
+            }
+
+            .document-lines {
+                max-width: 100%;
+            }
+
+            .chart {
+                min-width: 500px;
+            }
+
+            .dashboard-chart {
+                overflow-x: auto;
+            }
+
+            .ops-row {
+                grid-template-columns: 32px minmax(0, 1fr) auto;
+            }
+
+            .ops-row>div {
+                min-width: 0;
+            }
+
+            .event-mini {
+                min-width: 0;
+            }
+
+            .event-mini>div {
+                min-width: 0;
+            }
+
+            .event-mini b,
+            .ops-row b {
+                overflow-wrap: anywhere;
+            }
+
+            .status-flow {
+                overflow-x: auto;
+                flex-wrap: nowrap;
+                padding-bottom: 3px;
+            }
+
+            .status-step {
+                flex: 0 0 auto;
+            }
+
+            .quick-secondary {
+                flex-direction: column;
+            }
+
+            .quick-secondary .btn {
+                width: 100%;
+                min-height: 42px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .top {
+                padding-left: 8px;
+                padding-right: 8px;
+            }
+
+            .mobile-menu-btn {
+                flex-basis: 36px;
+                width: 36px;
+            }
+
+            .top-right .btn.sm:first-child {
+                width: 38px;
+                padding: 8px 5px;
+                font-size: 0;
+            }
+
+            .top-right .btn.sm:first-child .icon {
+                margin-right: 0;
+            }
+
+            .top-right .btn.sm:first-child .icon svg {
+                width: 16px;
+                height: 16px;
+            }
+
+            .top-right .btn.sm:nth-child(2) {
+                width: 38px;
+                padding: 8px 5px;
+                font-size: 0;
+            }
+
+            .top-right .btn.sm:nth-child(2)::after {
+                content: '+';
+                font-size: 20px;
+                line-height: 1;
+            }
+
+            .search {
+                font-size: 12px;
+            }
+
+            .page-head h1,
+            .dashboard-title h1 {
+                font-size: 22px;
+            }
+
+            .content {
+                padding-left: 10px;
+                padding-right: 10px;
+            }
+
+            .card {
+                padding: 12px;
+                border-radius: 10px;
+            }
+
+            .dashboard-actions {
+                grid-template-columns: 1fr;
+            }
+
+            .room-summary {
+                gap: 6px;
+            }
+
+            .room-stat {
+                padding: 10px 4px;
+            }
+
+            .kpi-value {
+                font-size: 22px;
+            }
+        }
+    </style>
+
+    <style>
+        /* Final mobile polish: desktop rules remain untouched. */
+        @media (max-width: 700px) {
+
+            html,
+            body {
+                width: 100%;
+                max-width: 100%;
+                margin: 0;
+                padding: 0;
+                overflow-x: hidden;
+            }
+
+            body.mobile-menu-open {
+                overflow: hidden;
+                touch-action: none;
+            }
+
+            .app {
+                width: 100%;
+                min-width: 0;
+                min-height: 100dvh;
+                overflow-x: clip;
+            }
+
+            /* Mobile sidebar: always flush to the viewport edge and fully hidden when closed. */
+            .sidebar {
+                position: fixed !important;
+                top: 0 !important;
+                bottom: 0 !important;
+                left: 0 !important;
+                right: auto !important;
+                width: min(300px, 84vw) !important;
+                max-width: 300px !important;
+                height: 100dvh !important;
+                margin: 0 !important;
+                padding: 16px 12px !important;
+                transform: translate3d(-105%, 0, 0) !important;
+                transition: transform .25s ease !important;
+                z-index: 1000 !important;
+                overflow-x: hidden !important;
+                overflow-y: auto !important;
+                -webkit-overflow-scrolling: touch;
+                box-shadow: 8px 0 30px rgba(23, 53, 45, .20) !important;
+            }
+
+            .sidebar.mobile-open {
+                transform: translate3d(0, 0, 0) !important;
+            }
+
+            .mobile-sidebar-backdrop {
+                position: fixed !important;
+                inset: 0 !important;
+                width: 100vw !important;
+                height: 100dvh !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                background: rgba(7, 20, 37, .48) !important;
+                z-index: 999 !important;
+            }
+
+            .main {
+                width: 100% !important;
+                min-width: 0 !important;
+                margin-left: 0 !important;
+                overflow-x: clip;
+            }
+
+            .top {
+                width: 100% !important;
+                min-width: 0 !important;
+                height: auto !important;
+                min-height: 60px !important;
+                padding: 8px !important;
+                gap: 6px !important;
+                display: flex !important;
+                align-items: center !important;
+            }
+
+            .mobile-menu-btn {
+                display: inline-flex !important;
+                flex: 0 0 38px !important;
+                width: 38px !important;
+                height: 38px !important;
+                padding: 0 !important;
+                align-items: center !important;
+                justify-content: center !important;
+                border: 1px solid var(--line) !important;
+                border-radius: 9px !important;
+                background: #fffdf8 !important;
+                color: var(--nav) !important;
+                font-size: 20px !important;
+            }
+
+            .search {
+                flex: 1 1 auto !important;
+                width: auto !important;
+                min-width: 60px !important;
+                max-width: none !important;
+                height: 38px !important;
+                padding: 8px 10px !important;
+                font-size: 12px !important;
+            }
+
+            .top-right {
+                flex: 0 0 auto !important;
+                display: flex !important;
+                gap: 4px !important;
+                align-items: center !important;
+            }
+
+            .top-right .btn.sm {
+                width: 38px !important;
+                min-width: 38px !important;
+                height: 38px !important;
+                min-height: 38px !important;
+                padding: 0 !important;
+                display: inline-flex !important;
+                align-items: center !important;
+                justify-content: center !important;
+                font-size: 0 !important;
+            }
+
+            .top-right .btn.sm .icon {
+                margin: 0 !important;
+            }
+
+            .top-right .btn.sm:nth-child(2)::after {
+                content: '+';
+                font-size: 20px;
+                line-height: 1;
+            }
+
+            .avatar {
+                width: 38px !important;
+                height: 38px !important;
+                flex: 0 0 38px !important;
+            }
+
+            .content {
+                width: 100% !important;
+                min-width: 0 !important;
+                padding: 14px 10px 30px !important;
+                overflow-x: clip !important;
+            }
+
+            .page-head,
+            .dashboard-head {
+                width: 100% !important;
+                min-width: 0 !important;
+            }
+
+            .page-title-row,
+            .dashboard-title {
+                min-width: 0 !important;
+                max-width: 100% !important;
+            }
+
+            .page-title-row>div,
+            .dashboard-title>div {
+                min-width: 0 !important;
+                max-width: 100% !important;
+            }
+
+            .page-head h1,
+            .dashboard-title h1 {
+                max-width: 100%;
+                overflow-wrap: anywhere;
+            }
+
+            .page-head>.btn,
+            .page-head>button {
+                max-width: 100%;
+            }
+
+            .grid,
+            .formgrid,
+            .dashboard-main-grid,
+            .dashboard-kpi-grid,
+            .report-summary,
+            .quick-grid {
+                width: 100% !important;
+                min-width: 0 !important;
+            }
+
+            .card {
+                max-width: 100% !important;
+                min-width: 0 !important;
+            }
+
+            .card>* {
+                max-width: 100%;
+            }
+
+            img,
+            svg,
+            video,
+            canvas {
+                max-width: 100%;
+            }
+
+            input,
+            select,
+            textarea,
+            button {
+                max-width: 100%;
+            }
+
+            .modal {
+                padding: max(8px, env(safe-area-inset-top)) 8px max(8px, env(safe-area-inset-bottom)) !important;
+                align-items: center !important;
+            }
+
+            .modalbox,
+            .report-modal {
+                width: 100% !important;
+                max-width: 100% !important;
+                max-height: calc(100dvh - 16px) !important;
+                overflow-x: hidden !important;
+                overflow-y: auto !important;
+                padding: 15px !important;
+                border-radius: 14px !important;
+            }
+
+            .modalhead {
+                position: sticky;
+                top: -15px;
+                z-index: 2;
+                padding-bottom: 10px;
+                background: #fffdf8;
+            }
+
+            .formgrid {
+                grid-template-columns: 1fr !important;
+                gap: 0 !important;
+            }
+
+            .formgrid .full {
+                grid-column: auto !important;
+            }
+
+            .field input,
+            .field select,
+            .field textarea {
+                width: 100% !important;
+                max-width: 100% !important;
+                font-size: 16px !important;
+            }
+
+            .table-wrap,
+            .table-responsive {
+                width: 100%;
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+
+            .table,
+            .report-table {
+                min-width: 680px;
+            }
+
+            .permission {
+                min-width: 620px;
+            }
+
+            .kanban {
+                width: 100%;
+                max-width: 100%;
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+
+            .drawer {
+                width: min(92vw, 390px) !important;
+                max-width: 390px !important;
+                padding: 16px !important;
+                overflow-x: hidden !important;
+            }
+        }
+
+        @media (max-width: 380px) {
+            .top {
+                gap: 4px !important;
+                padding: 7px 6px !important;
+            }
+
+            .mobile-menu-btn,
+            .top-right .btn.sm,
+            .avatar {
+                width: 34px !important;
+                height: 34px !important;
+                min-width: 34px !important;
+                flex-basis: 34px !important;
+            }
+
+            .search {
+                min-width: 50px !important;
+                font-size: 11px !important;
+                padding-left: 8px !important;
+                padding-right: 8px !important;
+            }
+
+            .content {
+                padding-left: 8px !important;
+                padding-right: 8px !important;
+            }
+
+            .page-head h1,
+            .dashboard-title h1 {
+                font-size: 21px !important;
+            }
+        }
+    </style>
+    <style>
+        /* Final mobile modal/navigation fixes */
+        html.modal-open,
+        body.modal-open {
+            overflow: hidden !important;
+            height: 100%;
+            overscroll-behavior: none;
+        }
+
+        @media (max-width: 700px) {
+            .modal {
+                position: fixed !important;
+                inset: 0 !important;
+                width: 100vw !important;
+                height: 100dvh !important;
+                padding: max(8px, env(safe-area-inset-top)) 8px max(8px, env(safe-area-inset-bottom)) !important;
+                align-items: center !important;
+                justify-content: center !important;
+                overflow: hidden !important;
+                z-index: 2000 !important;
+            }
+
+            .modalbox {
+                position: relative !important;
+                width: min(100%, 430px) !important;
+                max-width: 430px !important;
+                height: auto !important;
+                max-height: calc(100dvh - 16px) !important;
+                margin: 0 auto !important;
+                padding: 15px !important;
+                overflow-x: hidden !important;
+                overflow-y: auto !important;
+                -webkit-overflow-scrolling: touch;
+                overscroll-behavior: contain;
+                border-radius: 14px !important;
+            }
+
+            .modalhead {
+                position: sticky !important;
+                top: -15px !important;
+                z-index: 20 !important;
+                display: flex !important;
+                align-items: flex-start !important;
+                justify-content: space-between !important;
+                gap: 10px !important;
+                margin: -15px -15px 16px !important;
+                padding: 15px !important;
+                background: #fffdf8 !important;
+                border-bottom: 1px solid var(--line) !important;
+            }
+
+            .modalhead>div {
+                min-width: 0 !important;
+                padding-right: 4px !important;
+            }
+
+            .modalhead h2 {
+                margin: 0 0 4px !important;
+                font-size: 20px !important;
+                line-height: 1.2 !important;
+            }
+
+            .modalhead .close {
+                position: sticky !important;
+                top: 0 !important;
+                flex: 0 0 38px !important;
+                width: 38px !important;
+                height: 38px !important;
+                min-width: 38px !important;
+                min-height: 38px !important;
+                display: grid !important;
+                place-items: center !important;
+                z-index: 30 !important;
+                border: 1px solid #ded8cc !important;
+                background: #f1eee7 !important;
+                border-radius: 50% !important;
+                font-size: 18px !important;
+            }
+
+            /* Extra close control is always visible on long forms. */
+            .modalbox::after {
+                content: '';
+                display: block;
+                height: 4px;
+            }
+
+            .modalbox .btn {
+                min-height: 42px;
+            }
+
+            .modalbox .formgrid {
+                width: 100% !important;
+            }
+
+            .modalbox input,
+            .modalbox select,
+            .modalbox textarea {
+                width: 100% !important;
+                box-sizing: border-box !important;
+            }
+
+            .mobile-sidebar-backdrop.show {
+                display: block !important;
+            }
+        }
+    </style>
+    <style>
+        @media (max-width: 700px) {
+
+            /* Keep the modal close control visible even while a long form is scrolled. */
+            .modalbox .modalhead .close {
+                position: fixed !important;
+                top: max(12px, env(safe-area-inset-top)) !important;
+                right: 16px !important;
+                width: 40px !important;
+                height: 40px !important;
+                min-width: 40px !important;
+                min-height: 40px !important;
+                z-index: 2100 !important;
+                border: 1px solid #d8d1c4 !important;
+                background: #fffdf8 !important;
+                box-shadow: 0 4px 14px rgba(37, 51, 45, .16) !important;
+                border-radius: 50% !important;
+                color: #25332d !important;
+                font-size: 18px !important;
+            }
+        }
+    </style>
+
+    <style>
+        /* FINAL MOBILE OVERLAY / DRAWER FIXES
+   Desktop styles are intentionally untouched. */
+        @media (max-width: 700px) {
+
+            html,
+            body {
+                width: 100% !important;
+                min-width: 0 !important;
+                max-width: 100% !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                overflow-x: hidden !important;
+            }
+
+            /* ===== Mobile navigation ===== */
+            .mobile-sidebar-backdrop {
+                position: fixed !important;
+                inset: 0 !important;
+                width: 100vw !important;
+                height: 100dvh !important;
+                display: none !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                z-index: 3999 !important;
+                background: rgba(7, 20, 37, .48) !important;
+            }
+
+            .mobile-sidebar-backdrop.show {
+                display: block !important;
+            }
+
+            .sidebar {
+                position: fixed !important;
+                inset: 0 auto 0 0 !important;
+                width: min(82vw, 310px) !important;
+                max-width: 310px !important;
+                height: 100dvh !important;
+                margin: 0 !important;
+                padding: 18px 12px 24px !important;
+                transform: translate3d(-110%, 0, 0) !important;
+                transition: transform .25s ease !important;
+                z-index: 4000 !important;
+                overflow-x: hidden !important;
+                overflow-y: auto !important;
+                -webkit-overflow-scrolling: touch !important;
+                box-shadow: 8px 0 28px rgba(23, 53, 45, .28) !important;
+            }
+
+            .sidebar.mobile-open {
+                transform: translate3d(0, 0, 0) !important;
+            }
+
+            body.mobile-menu-open {
+                overflow: hidden !important;
+                touch-action: none !important;
+            }
+
+            .mobile-sidebar-close {
+                display: grid !important;
+                position: sticky !important;
+                top: 0 !important;
+                float: right !important;
+                z-index: 20 !important;
+                width: 36px !important;
+                height: 36px !important;
+                margin: -4px -2px 8px 8px !important;
+                place-items: center !important;
+                border: 1px solid rgba(255, 255, 255, .18) !important;
+                border-radius: 50% !important;
+                background: rgba(255, 255, 255, .10) !important;
+                color: #fff !important;
+                font-size: 21px !important;
+                line-height: 1 !important;
+            }
+
+            /* ===== Notification / profile / all side drawers ===== */
+            .overlay {
+                position: fixed !important;
+                inset: 0 !important;
+                width: 100vw !important;
+                height: 100dvh !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                display: none !important;
+                z-index: 4998 !important;
+                background: rgba(7, 20, 37, .48) !important;
+            }
+
+            .overlay.show {
+                display: block !important;
+            }
+
+            .drawer {
+                position: fixed !important;
+                top: 0 !important;
+                right: 0 !important;
+                bottom: 0 !important;
+                left: auto !important;
+                width: min(92vw, 430px) !important;
+                max-width: 430px !important;
+                height: 100dvh !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                background: #fffdf8 !important;
+                border-radius: 0 !important;
+                overflow-x: hidden !important;
+                overflow-y: auto !important;
+                -webkit-overflow-scrolling: touch !important;
+                overscroll-behavior: contain !important;
+                transform: translate3d(110%, 0, 0) !important;
+                transition: transform .25s ease !important;
+                z-index: 5000 !important;
+                box-shadow: -10px 0 35px rgba(23, 32, 51, .22) !important;
+            }
+
+            .drawer.show {
+                transform: translate3d(0, 0, 0) !important;
+            }
+
+            /* Drawer header remains visible while its content scrolls. */
+            .drawer .modalhead {
+                position: sticky !important;
+                top: 0 !important;
+                z-index: 20 !important;
+                display: flex !important;
+                align-items: center !important;
+                justify-content: space-between !important;
+                gap: 10px !important;
+                min-height: 64px !important;
+                margin: 0 !important;
+                padding: 12px 16px !important;
+                background: #fffdf8 !important;
+                border-bottom: 1px solid var(--line) !important;
+            }
+
+            .drawer .modalhead h2 {
+                margin: 0 !important;
+                font-size: 20px !important;
+                line-height: 1.2 !important;
+            }
+
+            .drawer .modalhead .close {
+                position: sticky !important;
+                top: 0 !important;
+                flex: 0 0 40px !important;
+                width: 40px !important;
+                height: 40px !important;
+                min-width: 40px !important;
+                min-height: 40px !important;
+                display: grid !important;
+                place-items: center !important;
+                border: 1px solid #d8d1c4 !important;
+                border-radius: 50% !important;
+                background: #f3efe7 !important;
+                color: #25332d !important;
+                font-size: 19px !important;
+                z-index: 30 !important;
+            }
+
+            .drawer> :not(.modalhead) {
+                margin-left: 16px !important;
+                margin-right: 16px !important;
+            }
+
+            .drawer .doc {
+                width: auto !important;
+                max-width: none !important;
+            }
+
+            .drawer button {
+                max-width: 100% !important;
+            }
+
+            /* Lock the page while a side drawer is open. */
+            body.drawer-open {
+                overflow: hidden !important;
+                touch-action: none !important;
+            }
+
+            .nav-menu-flex {
+                display: flex;
+                align-items: center;
+            }
+        }
+
+        @media (max-width: 380px) {
+            .sidebar {
+                width: 86vw !important;
+                max-width: 300px !important;
+            }
+
+            .nav-menu-flex {
+                display: flex;
+                align-items: center;
+            }
+
+            .drawer {
+                width: 94vw !important;
+            }
+        }
+    </style>
 </head>
 
 <body>
     <div class="app">
         <aside class="sidebar">
+            <button class="mobile-sidebar-close" type="button" onclick="closeMobileMenu()"
+                aria-label="Close navigation">✕</button>
             <div class="logo-wrap">
                 <img src="https://loreresorts.com/favicon.ico" alt="Lore Resorts logo"
                     onerror="this.style.display='none'">
@@ -1768,46 +2889,62 @@
             </div>
             <div class="nav">
                 <div class="group">Core</div>
-                <button onclick="go('dashboard')" id="nav-dashboard"><i
+                <button onclick="go('dashboard')" class="nav-menu-flex" id="nav-dashboard"><i
                         data-icon='dashboard'></i><span>Dashboard</span></button>
-                <button onclick="go('leads')" id="nav-leads"><i data-icon='leads'></i><span>Leads /
+                <button onclick="go('leads')" class="nav-menu-flex" id="nav-leads"><i data-icon='leads'></i><span>Leads
+                        /
                         Enquiries</span></button>
-                <button onclick="go('pipeline')" id="nav-pipeline"><i data-icon='pipeline'></i><span>Lead
+                <button onclick="go('pipeline')" class="nav-menu-flex" id="nav-pipeline"><i
+                        data-icon='pipeline'></i><span>Lead
                         Pipeline</span></button>
-                <button onclick="go('quotations')" id="nav-quotations"><i
+                <button onclick="go('quotations')" class="nav-menu-flex" id="nav-quotations"><i
                         data-icon='quote'></i><span>Quotations</span></button>
-                <button onclick="go('bookings')" id="nav-bookings"><i
+                <button onclick="go('bookings')" class="nav-menu-flex" id="nav-bookings"><i
                         data-icon='booking'></i><span>Bookings</span></button>
-                <button onclick="go('rooms')" id="nav-rooms"><i data-icon='room'></i><span>Rooms</span></button>
-                <button onclick="go('guests')" id="nav-guests"><i data-icon='guest'></i><span>Guests /
+                <button onclick="go('rooms')" class="nav-menu-flex" id="nav-rooms"><i
+                        data-icon='room'></i><span>Rooms</span></button>
+                <button onclick="go('guests')" class="nav-menu-flex" id="nav-guests"><i
+                        data-icon='guest'></i><span>Guests /
                         Customers</span></button>
-                <button onclick="go('payments')" id="nav-payments"><i
+                <button onclick="go('payments')" class="nav-menu-flex" id="nav-payments"><i
                         data-icon='payment'></i><span>Payments</span></button>
-                <button onclick="go('stay')" id="nav-stay"><i data-icon='stay'></i><span>Check-in /
+                <button onclick="go('stay')" class="nav-menu-flex" id="nav-stay"><i data-icon='stay'></i><span>Check-in
+                        /
                         Check-out</span></button>
                 <div class="group">Operations</div>
-                <button onclick="go('housekeeping')" id="nav-housekeeping"><i
+                <button onclick="go('housekeeping')" class="nav-menu-flex" id="nav-housekeeping"><i
                         data-icon='housekeeping'></i><span>Housekeeping</span></button>
-                <button onclick="go('inventory')" id="nav-inventory"><i data-icon='inventory'></i><span>Inventory &
+                <button onclick="go('inventory')" class="nav-menu-flex" id="nav-inventory"><i
+                        data-icon='inventory'></i><span>Inventory &
                         Requests</span></button>
-                <button onclick="go('packages')" id="nav-packages"><i data-icon='package'></i><span>Packages &
+                <button onclick="go('packages')" class="nav-menu-flex" id="nav-packages"><i
+                        data-icon='package'></i><span>Packages &
                         Activities</span></button>
-                <button onclick="go('events')" id="nav-events"><i data-icon='event'></i><span>Events</span></button>
-                <button onclick="go('support')" id="nav-support"><i data-icon='support'></i><span>Support &
+                <button onclick="go('events')" class="nav-menu-flex" id="nav-events"><i
+                        data-icon='event'></i><span>Events</span></button>
+                <button onclick="go('support')" class="nav-menu-flex" id="nav-support"><i
+                        data-icon='support'></i><span>Support &
                         Feedback</span></button>
                 <div class="group">Growth & Control</div>
-                <button onclick="go('marketing')" id="nav-marketing"><i data-icon='marketing'></i><span>Ads &
+                <button onclick="go('marketing')" class="nav-menu-flex" id="nav-marketing"><i
+                        data-icon='marketing'></i><span>Ads &
                         Integrations</span></button>
-                <button onclick="go('reports')" id="nav-reports"><i data-icon='reports'></i><span>Reports &
+                <button onclick="go('reports')" class="nav-menu-flex" id="nav-reports"><i
+                        data-icon='reports'></i><span>Reports &
                         Analytics</span></button>
-                <button onclick="go('users')" id="nav-users"><i data-icon='users'></i><span>Users &
+                <button onclick="go('users')" class="nav-menu-flex" id="nav-users"><i data-icon='users'></i><span>Users
+                        &
                         Permissions</span></button>
-                <button onclick="go('settings')" id="nav-settings"><i data-icon='settings'></i><span>Settings &
+                <button onclick="go('settings')" class="nav-menu-flex" id="nav-settings"><i
+                        data-icon='settings'></i><span>Settings &
                         Audit</span></button>
             </div>
         </aside>
+        <div class="mobile-sidebar-backdrop" id="mobileSidebarBackdrop" onclick="closeMobileMenu()"></div>
         <main class="main">
-            <header class="top"><input class="search" placeholder="Search leads, guests, bookings..."
+            <header class="top"><button class="mobile-menu-btn" id="mobileMenuBtn" onclick="toggleMobileMenu()"
+                    aria-label="Open navigation">☰</button><input class="search"
+                    placeholder="Search leads, guests, bookings..."
                     onkeydown="if(event.key==='Enter') toast('Global search opened for: '+this.value)">
                 <div class="top-right"><button class="btn sm" onclick="notifications()"><span class="icon"><svg
                                 width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -1822,8 +2959,8 @@
             <section class="content" id="content"></section>
         </main>
     </div>
-    <div class="modal" id="modal">
-        <div class="modalbox" id="modalbox"></div>
+    <div class="modal" id="modal" onclick="if(event.target===this) closeModal()">
+        <div class="modalbox" id="modalbox" onclick="event.stopPropagation()"></div>
     </div>
     <div class="toast" id="toast"></div>
     <div class="overlay" id="overlay" onclick="closeDrawer()"></div>
@@ -1882,6 +3019,8 @@
         }
 
 
+        document.addEventListener('keydown', function (e) { if (e.key === 'Escape') { closeDrawer(); closeMobileMenu(); closeModal(); } });
+
         function initIcons() {
             document.querySelectorAll('[data-icon]').forEach(function (el) {
                 el.outerHTML = icon(el.getAttribute('data-icon'), 17);
@@ -1890,16 +3029,42 @@
 
         function toast(msg) { let t = document.getElementById('toast'); t.textContent = msg; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 2200) }
         let pageHistory = [], currentPage = 'dashboard';
-        function go(page, push = true) { if (push && currentPage !== page) pageHistory.push(currentPage); currentPage = page; document.querySelectorAll('.nav button').forEach(x => x.classList.remove('active')); let n = document.getElementById('nav-' + page); if (n) n.classList.add('active'); render(page) }
+        function toggleMobileMenu() {
+            const sidebar = document.querySelector('.sidebar');
+            const backdrop = document.getElementById('mobileSidebarBackdrop');
+            const btn = document.getElementById('mobileMenuBtn');
+            if (!sidebar || !backdrop) return;
+            const open = sidebar.classList.toggle('mobile-open');
+            backdrop.classList.toggle('show', open);
+            document.body.classList.toggle('mobile-menu-open', open);
+            if (btn) {
+                btn.setAttribute('aria-label', open ? 'Close navigation' : 'Open navigation');
+                btn.textContent = open ? '✕' : '☰';
+            }
+        }
+        function closeMobileMenu() {
+            const sidebar = document.querySelector('.sidebar');
+            const backdrop = document.getElementById('mobileSidebarBackdrop');
+            const btn = document.getElementById('mobileMenuBtn');
+            if (sidebar) sidebar.classList.remove('mobile-open');
+            if (backdrop) backdrop.classList.remove('show');
+            document.body.classList.remove('mobile-menu-open');
+            if (btn) {
+                btn.setAttribute('aria-label', 'Open navigation');
+                btn.textContent = '☰';
+            }
+        }
+
+        function go(page, push = true) { closeMobileMenu(); if (push && currentPage !== page) pageHistory.push(currentPage); currentPage = page; document.querySelectorAll('.nav button').forEach(x => x.classList.remove('active')); let n = document.getElementById('nav-' + page); if (n) n.classList.add('active'); render(page) }
         function backPage() { if (pageHistory.length) { let p = pageHistory.pop(); currentPage = p; render(p) } else go('dashboard', false) }
-        function closeDrawer() { document.getElementById('drawer').classList.remove('show'); document.getElementById('overlay').classList.remove('show') }
-        function openDrawer(title, html) { document.getElementById('drawer').innerHTML = '<div class="modalhead"><h2>' + title + '</h2><button class="close" onclick="closeDrawer()">✕</button></div>' + html; document.getElementById('drawer').classList.add('show'); document.getElementById('overlay').classList.add('show') }
+        function closeDrawer() { const d = document.getElementById('drawer'), o = document.getElementById('overlay'); if (d) d.classList.remove('show'); if (o) o.classList.remove('show'); document.body.classList.remove('drawer-open'); }
+        function openDrawer(title, html) { const d = document.getElementById('drawer'), o = document.getElementById('overlay'); if (!d || !o) return; closeMobileMenu(); d.innerHTML = '<div class="modalhead"><h2>' + title + '</h2><button class="close" aria-label="Close" onclick="closeDrawer()">✕</button></div>' + html; d.scrollTop = 0; d.classList.add('show'); o.classList.add('show'); document.body.classList.add('drawer-open'); }
         function notifications() { openDrawer('Notifications', '<div class="notice">' + icon('alert', 15) + ' <b>6 notifications</b> require attention.</div>' + [['🔴', 'Room 301 maintenance overdue', 'Housekeeping'], ['🟠', 'Payment ₹30,000 received', 'Finance / BK-1042'], ['🟡', 'Follow-up due: Neha Kapoor', 'Sales'], ['🔵', 'New Instagram enquiry', 'Leads'], ['🟢', 'Event reminder queued', 'Events'], ['🟠', 'REQ-883 needs approval', 'Procurement']].map(x => '<div class="doc"><div><b>' + x[0] + ' ' + x[1] + '</b><small class="muted" style="display:block">' + x[2] + '</small></div><button class="btn sm" onclick="toast(\'Notification opened\')">Open</button></div>').join('') + '<button class="btn" onclick="toast(\'All notifications marked read\');closeDrawer()">Mark all read</button>') }
         function userProfile() { openDrawer('My Profile', '<div style="text-align:center"><div class="avatar" style="width:72px;height:72px;margin:auto;font-size:25px">BJ</div><h2>Bhairav Jangid</h2><div class="muted">Super Admin • Management</div></div><div class="section-title">Profile</div>' + [['Email', 'bhairav@example.com'], ['Phone', '+91 98765 43210'], ['Department', 'Management'], ['Role', 'Super Admin'], ['Last Login', '19 Sep 2026, 12:58 PM']].map(x => '<div class="doc"><span>' + x[0] + '</span><b>' + x[1] + '</b></div>').join('') + '<div class="section-title">Security</div><button class="btn" onclick="toast(\'Password change opened\')">Change Password</button> <button class="btn" onclick="toast(\'MFA settings opened\')">MFA</button>') }
 
         function openModal(type, data = {}) {
             document.getElementById('modalbox').classList.remove('report-modal');
-            let m = document.getElementById('modal'), b = document.getElementById('modalbox'); m.classList.add('show');
+            let m = document.getElementById('modal'), b = document.getElementById('modalbox'); m.classList.add('show'); document.body.classList.add('modal-open'); document.documentElement.classList.add('modal-open'); b.scrollTop = 0;
             let close = `<button class="close" onclick="closeModal()">✕</button>`;
             if (type === 'quick') b.innerHTML = `
 <div class="modalhead">
@@ -2046,9 +3211,22 @@ ${field('Amount', 'rAmt', '12500')}${field('Needed By', 'rDate', '20 Sep')}
             if (type === 'houseAssign') b.innerHTML = `<div class="modalhead"><h2>Assign Housekeeping Task</h2>${close}</div><div class="formgrid">${field('Room', 'hRoom', '301', ['101', '102', '201', '202', '301', '302'])}${field('Task', 'hTask', 'Deep Cleaning', ['Checkout Cleaning', 'Deep Cleaning', 'Inspection', 'Linen Change', 'Minibar Refill', 'Maintenance Handoff'])}${field('Assigned Staff', 'hStaff', 'Pooja', ['Pooja', 'Ramesh', 'Anita', 'Sunita', 'Manager'])}${field('Priority', 'hPriority', 'High', ['Low', 'Normal', 'High', 'Urgent'])}${field('Due Time', 'hDue', '14:30')}${field('Supervisor', 'hSup', 'Housekeeping Manager')}</div><div class="section-title">Checklist</div><div class="checklist">${['Bed & linen', 'Bathroom sanitation', 'Dusting & vacuum', 'Minibar', 'Amenities', 'Inventory count', 'Damage inspection', 'Photos before ready'].map(x => `<label><input type="checkbox" checked> ${x}</label>`).join('')}</div><button class="btn primary" onclick="toast('Housekeeping task assigned successfully');closeModal()">Assign Task</button>`;
             if (type === 'leadDetails') b.innerHTML = leadDetails(data);
         }
-        function closeModal() { document.getElementById('modal').classList.remove('show') }
+        function closeModal() {
+            const modal = document.getElementById('modal');
+            if (modal) modal.classList.remove('show');
+            document.body.classList.remove('modal-open');
+            document.documentElement.classList.remove('modal-open');
+        }
         function field(label, id, value = '', options) { if (Array.isArray(options)) return `<div class="field"><label>${label}</label><select id="${id}">${options.map(x => `<option>${x}</option>`).join('')}</select></div>`; return `<div class="field"><label>${label}</label><input id="${id}" value="${value}"></div>` }
 
+
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape') {
+                const modal = document.getElementById('modal');
+                if (modal && modal.classList.contains('show')) closeModal();
+                else closeMobileMenu();
+            }
+        });
 
         function togglePageForm(id) {
             const form = document.getElementById(id);
